@@ -1,14 +1,8 @@
-        const X = 1000;
-        const Y = 600;
-        const TILES = 70;
-
-class RiskEngine {
-    
-}
-
-
 class Tile {
     sqms : [number, number][];
+    armies : number;
+    owner : number;
+    center : [number, number];
     constructor(public id: number, matrix:number[][]) {
         do {
             var row = Math.floor(Math.random() * X);
@@ -17,6 +11,9 @@ class Tile {
         matrix[row][column] = this.id;
         this.sqms = [];
         this.sqms.push([row, column]);
+        this.owner = 0;
+        this.armies = 0;
+        this.center = [0, 0];
     }
     addSqm(matrix:number[][]) : number {
         var borders = this.getBorder(matrix);
@@ -66,26 +63,15 @@ class Tile {
         });
         return borders;
     }
-}
+    calculateCenter() {
+        var points = this.sqms.length
+        var x = 0;
+        var y = 0;
+        this.sqms.forEach(sqm => {
+            x += sqm[0]
+            y += sqm[1]
+        });
 
-function run() { 
-    var matrix:number[][] = [];
-    for(var i = 0; i < X; i++){
-        matrix[i] = new Array(Y).fill(0);
-    }
-    var draw = '';
-    var numberFilled = 0;
-    var tiles:Tile[] = [];
-
-    for(var i = 1; i <= TILES; i++) {
-        tiles.push(new Tile(i, matrix));
-        numberFilled++
-    }
-
-    while(numberFilled < X*Y) {
-        var tileToTryAdd = Math.floor(Math.random() * TILES);
-        numberFilled += tiles[tileToTryAdd].addSqm(matrix);
-    }
-
-    return matrix;
+        this.center = [x / points, y / points];
+        }
 }
