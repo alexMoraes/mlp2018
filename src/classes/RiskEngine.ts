@@ -16,8 +16,8 @@ enum GameState {
 class RiskEngine {
     turn_player_id : number;
     matrix : number[][];
-    tiles : Tile[];
-    players : Player[];
+    tiles : ITile[];
+    players : IPlayer[];
     game_state : GameState;
     constructor(initial_army_number : number) {
         this.turn_player_id = 1;

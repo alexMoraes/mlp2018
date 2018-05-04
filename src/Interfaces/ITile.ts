@@ -1,5 +1,6 @@
 interface ITile {
-    Neighbors: Array<ITile>;
-    Owner: IPlayer;
-    Armies: number;
+    owner: number
+    armies: number
+    addSqm(matrix:number[][]) : number
+    calculateCenter()
 }

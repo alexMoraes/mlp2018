@@ -1,4 +1,4 @@
 interface IPlayer {
-    OwnedTiles: Array<ITile>;
-    Goal: IGoal;
+    id: number
+    army_to_position: number
 }

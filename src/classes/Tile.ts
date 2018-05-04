@@ -1,4 +1,4 @@
-class Tile {
+class Tile implements ITile {
     sqms : [number, number][];
     armies : number;
     owner : number;
