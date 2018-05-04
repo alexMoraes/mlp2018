@@ -63,7 +63,7 @@ class Tile implements ITile {
         });
         return borders;
     }
-    calculateCenter() {
+    calculateCenter(): void {
         var points = this.sqms.length
         var x = 0;
         var y = 0;
