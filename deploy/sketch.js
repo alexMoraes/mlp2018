@@ -36,7 +36,7 @@ function setup() {
     }
     img.updatePixels();
     image(img, 0, 0);
-    risk.game_state = GameState.POSITIONING_ARMY;
+    risk.gameState = GameState.POSITIONING_ARMY;
 }
 
 function draw() {
@@ -55,10 +55,10 @@ function draw() {
 }
 
 function mouseClicked() {
-    var tile_id = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
-    if (tile_id > 0) {
-        tile_index = tile_id - 1;
-        risk.click(tile_index);
+    var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
+    if (tileId > 0) {
+        tileIndex = tileId - 1;
+        risk.click(tileIndex);
         draw();
     }
 }

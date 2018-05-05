@@ -15,6 +15,15 @@ class Tile implements ITile {
         this.armies = 0;
         this.center = [0, 0];
     }
+    addArmy(armies: number): void {
+        this.armies += armies;
+    }
+    hasOwner(): boolean {
+        return this.owner > 0;
+    }
+    setOwner(ownerId: number) {
+        this.owner = ownerId;
+    }
     addSqm(matrix:number[][]) : number {
         var borders = this.getBorder(matrix);
         if(borders.length > 0) {
@@ -73,5 +82,5 @@ class Tile implements ITile {
         });
 
         this.center = [x / points, y / points];
-        }
+    }
 }
