@@ -5,8 +5,8 @@ class AttackPhase extends Phase {
         super(player, new SelectTileStep(player));
     }
 
-    public takeAction(tileId: number): void{
-        this.getCurrentStep().takeAction(tileId);
+    public takeAction(tile: ITile): boolean {
+        return this.getCurrentStep().takeAction(tile);
     }
 
     public hasNext(): boolean {

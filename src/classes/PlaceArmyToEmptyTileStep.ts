@@ -1,8 +1,9 @@
 /// <reference path="Step.ts"/>
 
-class SelectTileStep extends Step {
+class PlaceArmyToEmptyTileStep extends Step {
     public takeAction(tile: ITile): boolean {
-        return this.getPlayer().selectTile(tile);
+        this.getPlayer().selectTile(tile);
+        return this.getPlayer().takeTile();
     }
 
     public hasNext(): boolean {

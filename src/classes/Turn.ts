@@ -4,11 +4,11 @@ class Turn implements ITakesAction {
     private currentPhase: ITakesAction;
     public constructor(player: IPlayer){
         this.player = player;
-        this.currentPhase = new PlaceArmiesPhase(player);
+        this.currentPhase = new ChooseTilesPhase(player);
     }
 
-    public takeAction(tileId: number): void {
-        this.currentPhase.takeAction(tileId);
+    public takeAction(tile: ITile): boolean {
+        return this.currentPhase.takeAction(tile);
     }
 
     public hasNext(): boolean {
@@ -21,7 +21,9 @@ class Turn implements ITakesAction {
             return this;
         }
         else {
-            return <ITakesAction> this.nextTurn;
+            var next = this.nextTurn;
+            this.currentPhase = this.currentPhase.nextAction();
+            return <ITakesAction> next;
         }
     }
 

@@ -1,5 +1,5 @@
 interface ITakesAction {
-    takeAction(tileId: number): void;
+    takeAction(tile: ITile): boolean; //valid action
     hasNext(): boolean;
     nextAction(): ITakesAction;
 }

@@ -1,7 +1,6 @@
-class PlaceArmiesPhase extends Phase {
+class ChooseTilesPhase extends Phase {
     constructor(player: IPlayer) {
-        super(player, new PlaceArmyToOwnerTileStep(player));
-        player.giveArmies(5);
+        super(player, new PlaceArmyToEmptyTileStep(player));
     }
     _validAction: boolean = true;
 
@@ -15,7 +14,8 @@ class PlaceArmiesPhase extends Phase {
     }
 
     public nextAction(): ITakesAction {
+        console.log(this.getPlayer().armiesToPlace());
         if(this.getPlayer().armiesToPlace() > 0) return this;
-        else return new AttackPhase(this.getPlayer());
+        else return new PlaceArmiesPhase(this.getPlayer());
     }
 }

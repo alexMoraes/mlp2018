@@ -22,7 +22,7 @@ class RiskEngine {
     players : IPlayer[];
     gameState : GameState;
     private currentTurn: ITakesAction;
-    constructor(initial_army_number : number) {
+    constructor(initialArmyNumber : number) {
         this.turnPlayerId = 1;
         this.gameState = GameState.INITIALIZING;
         this.matrix = [];
@@ -31,10 +31,17 @@ class RiskEngine {
               
         var tilesNumber = Math.floor(TILES / 2)
         var numberFilled = 0;
-
+        var restTiles = tilesNumber;
         // Create players
-        for(var i = 1; i <= PLAYERS; i++){
-            this.players.push(new Player(i, COLORS[i-1]))
+        for(var i = PLAYERS; i >= 1; i--){
+            var tilesToPlayer = 0;
+            if(i == 1) {
+                tilesToPlayer = restTiles;
+            } else {
+                tilesToPlayer = Math.floor((TILES-tilesNumber)/PLAYERS);
+                restTiles -= tilesToPlayer;
+            }
+            this.players.unshift(new Player(i, COLORS[i-1], tilesToPlayer));
         }
 
         this.currentTurn = TurnFactory.getTurns(this.players)[0];
@@ -73,35 +80,35 @@ class RiskEngine {
         }
     }
 
-    click(tile_number: number) {
-        this.currentTurn.takeAction(tile_number);
+    click(tileNumber: number) {
+        this.currentTurn.takeAction(this.tiles[tileNumber]);
         this.currentTurn = this.currentTurn.nextAction();
 
         // switch (this.gameState) {
         //     case GameState.INITIALIZING:
-        //         console.log("Tile " + tile_number + " clicked, current state: initializing");
+        //         console.log("Tile " + tileNumber + " clicked, current state: initializing");
         //         break;
         //     case GameState.POSITIONING_ARMY:
-        //         console.log("Tile " + tile_number + " clicked, current state: positioning army");
+        //         console.log("Tile " + tileNumber + " clicked, current state: positioning army");
                 
         //         var player = this.players[this.turnPlayerId - 1]
-        //         var owner = this.tiles[tile_number].owner
+        //         var owner = this.tiles[tileNumber].owner
 
         //         if (owner == 0 || owner == player.id) {
-        //             this.tiles[tile_number].owner = player.id;
-        //             this.tiles[tile_number].armies += 1;
-        //             player.army_to_position -= 1;
+        //             this.tiles[tileNumber].owner = player.id;
+        //             this.tiles[tileNumber].armies += 1;
+        //             player.armyToPosition -= 1;
         //             this.turnPlayerId = player.id == 1 ? 2 : 1;
-        //             if (this.players[0].army_to_position == 0 && this.players[1].army_to_position == 0)
+        //             if (this.players[0].armyToPosition == 0 && this.players[1].armyToPosition == 0)
         //                 this.gameState = GameState.SELECTING_ATTACK_SOURCE
         //         }
         //         break;
         //     case GameState.SELECTING_ATTACK_SOURCE:
-        //         console.log("Tile " + tile_number + " clicked, current state: selecting attack source");
+        //         console.log("Tile " + tileNumber + " clicked, current state: selecting attack source");
 
         //         break;
         //     case GameState.SELECTING_ATTACK_TARGET:
-        //         console.log("Tile " + tile_number + " clicked, current state: selecting attack target");
+        //         console.log("Tile " + tileNumber + " clicked, current state: selecting attack target");
         //         break;
         //     default:
                 

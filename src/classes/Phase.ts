@@ -14,7 +14,7 @@ abstract class Phase implements ITakesAction{
         return this.player;
     }
 
-    public abstract takeAction(tileId: number): void;
+    public abstract takeAction(tile: ITile): boolean;
     public abstract hasNext(): boolean;
     public abstract nextAction(): ITakesAction;
 }
