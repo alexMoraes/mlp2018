@@ -13,12 +13,15 @@ enum GameState {
     SELECTING_ATTACK_TARGET,
 }
 
+type Nullable<T> = T | null;
+
 class RiskEngine {
     turn_player_id : number;
     matrix : number[][];
     tiles : ITile[];
     players : IPlayer[];
     game_state : GameState;
+    private currentTurn: Nullable<ITakesAction> = null; // Por algum motivo esse demônio não me deixa criar uma propriedade não inicializada ¬¬
     constructor(initial_army_number : number) {
         this.turn_player_id = 1;
         this.game_state = GameState.INITIALIZING;
@@ -69,6 +72,10 @@ class RiskEngine {
     }
 
     click(tile_number: number) {
+        var player = this.players[this.turn_player_id - 1]
+        this.currentTurn = new Turn(player);
+        this.currentTurn = this.currentTurn.takeAction(tile_number);
+
         switch (this.game_state) {
             case GameState.INITIALIZING:
                 console.log("Tile " + tile_number + " clicked, current state: initializing");

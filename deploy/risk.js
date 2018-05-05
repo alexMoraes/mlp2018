@@ -22,6 +22,7 @@ var GameState;
 })(GameState || (GameState = {}));
 class RiskEngine {
     constructor(initial_army_number) {
+        this.currentTurn = null; // Por algum motivo esse demônio não me deixa criar uma propriedade não inicializada ¬¬
         this.turn_player_id = 1;
         this.game_state = GameState.INITIALIZING;
         this.matrix = [];
@@ -62,6 +63,9 @@ class RiskEngine {
         }
     }
     click(tile_number) {
+        var player = this.players[this.turn_player_id - 1];
+        this.currentTurn = new Turn(player);
+        this.currentTurn = this.currentTurn.takeAction(tile_number);
         switch (this.game_state) {
             case GameState.INITIALIZING:
                 console.log("Tile " + tile_number + " clicked, current state: initializing");
@@ -161,5 +165,29 @@ class Tile {
             y += sqm[1];
         });
         this.center = [x / points, y / points];
+    }
+}
+class Turn {
+    constructor(player) {
+        this.nextTurn = null;
+        this.player = player;
+    }
+    takeAction(tileId) {
+        return this;
+    }
+    setNextTurn(nextTurn) {
+        this.nextTurn = nextTurn;
+    }
+}
+class TurnFactory {
+    getTurns(players) {
+        var turns = new Array();
+        players.forEach(player => {
+            turns.push(new Turn(player));
+        });
+        for (var i = 0; i < turns.length; i++) {
+            turns[i].setNextTurn(turns[(i + 1) % turns.length]);
+        }
+        return turns;
     }
 }
