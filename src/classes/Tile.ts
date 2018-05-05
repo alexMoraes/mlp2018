@@ -94,17 +94,17 @@ class Tile implements ITile {
             var row = sqm[0];
             var column = sqm[1];
             var key: [number, number];
-            if(row + 1 <= maxX && matrix[row+1][column] == 0 && !this.borderers.some(c => c.id == matrix[row+1][column])) {
-                this.borderers.push(tiles[matrix[row+1][column]]);
+            if(row + 1 <= maxX && matrix[row+1][column] != 0 && matrix[row+1][column] != this.id && !this.borderers.some(c => c.id == matrix[row+1][column])) {
+                this.borderers.push(tiles[matrix[row+1][column]-1]);
             } 
-            if(row - 1 >= min && matrix[row-1][column] == 0 && !this.borderers.some(c => c.id == matrix[row-1][column])) {
-                this.borderers.push(tiles[matrix[row-1][column]]);
+            if(row - 1 >= min && matrix[row-1][column] != 0 && matrix[row-1][column] != this.id && !this.borderers.some(c => c.id == matrix[row-1][column])) {
+                this.borderers.push(tiles[matrix[row-1][column]-1]);
             } 
-            if(column - 1 >= min && matrix[row][column-1] == 0 && !this.borderers.some(c => c.id == matrix[row][column-1])) {
-                this.borderers.push(tiles[matrix[row][column-1]]);
+            if(column - 1 >= min && matrix[row][column-1] != 0 && matrix[row][column-1] != this.id && !this.borderers.some(c => c.id == matrix[row][column-1])) {
+                this.borderers.push(tiles[matrix[row][column-1]-1]);
             }
-            if(column + 1 <= maxY && matrix[row][column+1] == 0 && !this.borderers.some(c => c.id == matrix[row][column+1])) {
-                this.borderers.push(tiles[matrix[row][column+1]]);
+            if(column + 1 <= maxY && matrix[row][column+1] != 0 && matrix[row][column+1] != this.id && !this.borderers.some(c => c.id == matrix[row][column+1])) {
+                this.borderers.push(tiles[matrix[row][column+1]-1]);
             }
         });
     }

@@ -66,11 +66,6 @@ class RiskEngine {
         // Remove water tiles
         this.tiles = this.tiles.slice(0, tilesNumber)
 
-        // Calculate the center and borderers of the tiles for drawing the army circles
-        this.tiles.forEach(tile => {
-            tile.calculateCenter();
-            tile.calculateBorderers(this.matrix, this.tiles);
-        });
     
         // Fill water tiles positions with 0's
         for(var i = 0; i < X; i++) {
@@ -79,9 +74,16 @@ class RiskEngine {
                     this.matrix[i][j] = 0
             }
         }
+
+         // Calculate the center and borderers of the tiles for drawing the army circles
+        this.tiles.forEach(tile => {
+            tile.calculateCenter();
+            tile.calculateBorderers(this.matrix, this.tiles);
+        });
     }
 
     click(tileNumber: number) {
+        console.log(this.tiles[tileNumber].borderers);
         this.currentTurn.takeAction(this.tiles[tileNumber]);
         this.currentTurn = this.currentTurn.nextAction();
 

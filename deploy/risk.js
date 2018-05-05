@@ -210,11 +210,6 @@ class RiskEngine {
         }
         // Remove water tiles
         this.tiles = this.tiles.slice(0, tilesNumber);
-        // Calculate the center and borderers of the tiles for drawing the army circles
-        this.tiles.forEach(tile => {
-            tile.calculateCenter();
-            tile.calculateBorderers(this.matrix, this.tiles);
-        });
         // Fill water tiles positions with 0's
         for (var i = 0; i < X; i++) {
             for (var j = 0; j < Y; j++) {
@@ -222,8 +217,14 @@ class RiskEngine {
                     this.matrix[i][j] = 0;
             }
         }
+        // Calculate the center and borderers of the tiles for drawing the army circles
+        this.tiles.forEach(tile => {
+            tile.calculateCenter();
+            tile.calculateBorderers(this.matrix, this.tiles);
+        });
     }
     click(tileNumber) {
+        console.log(this.tiles[tileNumber].borderers);
         this.currentTurn.takeAction(this.tiles[tileNumber]);
         this.currentTurn = this.currentTurn.nextAction();
         // switch (this.gameState) {
@@ -356,17 +357,17 @@ class Tile {
             var row = sqm[0];
             var column = sqm[1];
             var key;
-            if (row + 1 <= maxX && matrix[row + 1][column] == 0 && !this.borderers.some(c => c.id == matrix[row + 1][column])) {
-                this.borderers.push(tiles[matrix[row + 1][column]]);
+            if (row + 1 <= maxX && matrix[row + 1][column] != 0 && matrix[row + 1][column] != this.id && !this.borderers.some(c => c.id == matrix[row + 1][column])) {
+                this.borderers.push(tiles[matrix[row + 1][column] - 1]);
             }
-            if (row - 1 >= min && matrix[row - 1][column] == 0 && !this.borderers.some(c => c.id == matrix[row - 1][column])) {
-                this.borderers.push(tiles[matrix[row - 1][column]]);
+            if (row - 1 >= min && matrix[row - 1][column] != 0 && matrix[row - 1][column] != this.id && !this.borderers.some(c => c.id == matrix[row - 1][column])) {
+                this.borderers.push(tiles[matrix[row - 1][column] - 1]);
             }
-            if (column - 1 >= min && matrix[row][column - 1] == 0 && !this.borderers.some(c => c.id == matrix[row][column - 1])) {
-                this.borderers.push(tiles[matrix[row][column - 1]]);
+            if (column - 1 >= min && matrix[row][column - 1] != 0 && matrix[row][column - 1] != this.id && !this.borderers.some(c => c.id == matrix[row][column - 1])) {
+                this.borderers.push(tiles[matrix[row][column - 1] - 1]);
             }
-            if (column + 1 <= maxY && matrix[row][column + 1] == 0 && !this.borderers.some(c => c.id == matrix[row][column + 1])) {
-                this.borderers.push(tiles[matrix[row][column + 1]]);
+            if (column + 1 <= maxY && matrix[row][column + 1] != 0 && matrix[row][column + 1] != this.id && !this.borderers.some(c => c.id == matrix[row][column + 1])) {
+                this.borderers.push(tiles[matrix[row][column + 1] - 1]);
             }
         });
     }
