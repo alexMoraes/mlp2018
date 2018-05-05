@@ -7,4 +7,5 @@ interface ITile {
     hasOwner(): boolean
     addSqm(matrix: number[][]) : number
     calculateCenter(): void
+    calculateBorderers(matrix:number[][], tiles:ITile[]): void
 }

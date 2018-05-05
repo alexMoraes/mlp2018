@@ -66,9 +66,10 @@ class RiskEngine {
         // Remove water tiles
         this.tiles = this.tiles.slice(0, tilesNumber)
 
-        // Calculate the center of the tiles for drawing the army circles
+        // Calculate the center and borderers of the tiles for drawing the army circles
         this.tiles.forEach(tile => {
             tile.calculateCenter();
+            tile.calculateBorderers(this.matrix, this.tiles);
         });
     
         // Fill water tiles positions with 0's

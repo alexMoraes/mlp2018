@@ -3,12 +3,14 @@ class Tile implements ITile {
     armies : number;
     owner : number;
     center : [number, number];
+    borderers: ITile[];
     constructor(public id: number, matrix:number[][]) {
         do {
             var row = Math.floor(Math.random() * X);
             var column = Math.floor(Math.random() * Y);
         } while (matrix[row][column] != 0)
         matrix[row][column] = this.id;
+        this.borderers = [];
         this.sqms = [];
         this.sqms.push([row, column]);
         this.owner = 0;
@@ -82,5 +84,28 @@ class Tile implements ITile {
         });
 
         this.center = [x / points, y / points];
+    }
+
+    calculateBorderers(matrix:number[][], tiles:ITile[]): void {
+        var min = 0;
+        var maxX = X-1;
+        var maxY = Y-1;
+        this.sqms.forEach(sqm => {
+            var row = sqm[0];
+            var column = sqm[1];
+            var key: [number, number];
+            if(row + 1 <= maxX && matrix[row+1][column] == 0 && !this.borderers.some(c => c.id == matrix[row+1][column])) {
+                this.borderers.push(tiles[matrix[row+1][column]]);
+            } 
+            if(row - 1 >= min && matrix[row-1][column] == 0 && !this.borderers.some(c => c.id == matrix[row-1][column])) {
+                this.borderers.push(tiles[matrix[row-1][column]]);
+            } 
+            if(column - 1 >= min && matrix[row][column-1] == 0 && !this.borderers.some(c => c.id == matrix[row][column-1])) {
+                this.borderers.push(tiles[matrix[row][column-1]]);
+            }
+            if(column + 1 <= maxY && matrix[row][column+1] == 0 && !this.borderers.some(c => c.id == matrix[row][column+1])) {
+                this.borderers.push(tiles[matrix[row][column+1]]);
+            }
+        });
     }
 }

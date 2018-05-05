@@ -14,7 +14,6 @@ class ChooseTilesPhase extends Phase {
     }
 
     public nextAction(): ITakesAction {
-        console.log(this.getPlayer().armiesToPlace());
         if(this.getPlayer().armiesToPlace() > 0) return this;
         else return new PlaceArmiesPhase(this.getPlayer());
     }

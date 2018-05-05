@@ -39,7 +39,6 @@ class ChooseTilesPhase extends Phase {
         return !this._validAction;
     }
     nextAction() {
-        console.log(this.getPlayer().armiesToPlace());
         if (this.getPlayer().armiesToPlace() > 0)
             return this;
         else
@@ -211,9 +210,10 @@ class RiskEngine {
         }
         // Remove water tiles
         this.tiles = this.tiles.slice(0, tilesNumber);
-        // Calculate the center of the tiles for drawing the army circles
+        // Calculate the center and borderers of the tiles for drawing the army circles
         this.tiles.forEach(tile => {
             tile.calculateCenter();
+            tile.calculateBorderers(this.matrix, this.tiles);
         });
         // Fill water tiles positions with 0's
         for (var i = 0; i < X; i++) {
@@ -274,6 +274,7 @@ class Tile {
             var column = Math.floor(Math.random() * Y);
         } while (matrix[row][column] != 0);
         matrix[row][column] = this.id;
+        this.borderers = [];
         this.sqms = [];
         this.sqms.push([row, column]);
         this.owner = 0;
@@ -346,6 +347,28 @@ class Tile {
             y += sqm[1];
         });
         this.center = [x / points, y / points];
+    }
+    calculateBorderers(matrix, tiles) {
+        var min = 0;
+        var maxX = X - 1;
+        var maxY = Y - 1;
+        this.sqms.forEach(sqm => {
+            var row = sqm[0];
+            var column = sqm[1];
+            var key;
+            if (row + 1 <= maxX && matrix[row + 1][column] == 0 && !this.borderers.some(c => c.id == matrix[row + 1][column])) {
+                this.borderers.push(tiles[matrix[row + 1][column]]);
+            }
+            if (row - 1 >= min && matrix[row - 1][column] == 0 && !this.borderers.some(c => c.id == matrix[row - 1][column])) {
+                this.borderers.push(tiles[matrix[row - 1][column]]);
+            }
+            if (column - 1 >= min && matrix[row][column - 1] == 0 && !this.borderers.some(c => c.id == matrix[row][column - 1])) {
+                this.borderers.push(tiles[matrix[row][column - 1]]);
+            }
+            if (column + 1 <= maxY && matrix[row][column + 1] == 0 && !this.borderers.some(c => c.id == matrix[row][column + 1])) {
+                this.borderers.push(tiles[matrix[row][column + 1]]);
+            }
+        });
     }
 }
 class Turn {
