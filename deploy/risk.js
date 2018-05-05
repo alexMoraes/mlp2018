@@ -90,12 +90,12 @@ var GameState;
 })(GameState || (GameState = {}));
 class RiskEngine {
     constructor(initial_army_number) {
-        this.turn_player_id = 1;
-        this.game_state = GameState.INITIALIZING;
+        this.turnPlayerId = 1;
+        this.gameState = GameState.INITIALIZING;
         this.matrix = [];
         this.tiles = [];
         this.players = [];
-        var tiles_number = Math.floor(TILES / 2);
+        var tilesNumber = Math.floor(TILES / 2);
         var numberFilled = 0;
         // Create players
         for (var i = 1; i <= PLAYERS; i++) {
@@ -117,7 +117,7 @@ class RiskEngine {
             numberFilled += this.tiles[tileToTryAdd].addSqm(this.matrix);
         }
         // Remove water tiles
-        this.tiles = this.tiles.slice(0, tiles_number);
+        this.tiles = this.tiles.slice(0, tilesNumber);
         // Calculate the center of the tiles for drawing the army circles
         this.tiles.forEach(tile => {
             tile.calculateCenter();
@@ -125,7 +125,7 @@ class RiskEngine {
         // Fill water tiles positions with 0's
         for (var i = 0; i < X; i++) {
             for (var j = 0; j < Y; j++) {
-                if (this.matrix[i][j] > tiles_number)
+                if (this.matrix[i][j] > tilesNumber)
                     this.matrix[i][j] = 0;
             }
         }
@@ -133,21 +133,21 @@ class RiskEngine {
     click(tile_number) {
         this.currentTurn.takeAction(tile_number);
         this.currentTurn = this.currentTurn.nextAction();
-        // switch (this.game_state) {
+        // switch (this.gameState) {
         //     case GameState.INITIALIZING:
         //         console.log("Tile " + tile_number + " clicked, current state: initializing");
         //         break;
         //     case GameState.POSITIONING_ARMY:
         //         console.log("Tile " + tile_number + " clicked, current state: positioning army");
-        //         var player = this.players[this.turn_player_id - 1]
+        //         var player = this.players[this.turnPlayerId - 1]
         //         var owner = this.tiles[tile_number].owner
         //         if (owner == 0 || owner == player.id) {
         //             this.tiles[tile_number].owner = player.id;
         //             this.tiles[tile_number].armies += 1;
         //             player.army_to_position -= 1;
-        //             this.turn_player_id = player.id == 1 ? 2 : 1;
+        //             this.turnPlayerId = player.id == 1 ? 2 : 1;
         //             if (this.players[0].army_to_position == 0 && this.players[1].army_to_position == 0)
-        //                 this.game_state = GameState.SELECTING_ATTACK_SOURCE
+        //                 this.gameState = GameState.SELECTING_ATTACK_SOURCE
         //         }
         //         break;
         //     case GameState.SELECTING_ATTACK_SOURCE:
