@@ -6,7 +6,11 @@ class SelectTileStep extends Step {
         this.getPlayer().takeArmies(1);
     }
 
-    public nextAction(): ITakesAction{
+    public hasNext(): boolean {
+        return true;
+    }
+
+    public nextAction(): ITakesAction {
         return this;
     }
 }

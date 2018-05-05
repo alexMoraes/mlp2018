@@ -19,6 +19,9 @@ class AttackPhase extends Phase {
     takeAction(tileId) {
         this.getCurrentStep().takeAction(tileId);
     }
+    hasNext() {
+        return true;
+    }
     nextAction() {
         return this;
     }
@@ -30,8 +33,15 @@ class PlaceArmiesPhase extends Phase {
     takeAction(tileId) {
         this.getCurrentStep().takeAction(tileId);
     }
+    hasNext() {
+        return true;
+    }
     nextAction() {
-        return new AttackPhase(this.getPlayer());
+        if (this.getPlayer().armiesToPlace() > 0)
+            return this;
+        else
+            return new AttackPhase(this.getPlayer());
+        ;
     }
 }
 class Player {
@@ -165,6 +175,9 @@ class SelectTileStep extends Step {
         this.getPlayer().selectTile(tileId);
         this.getPlayer().takeArmies(1);
     }
+    hasNext() {
+        return true;
+    }
     nextAction() {
         return this;
     }
@@ -251,11 +264,17 @@ class Turn {
     takeAction(tileId) {
         this.currentPhase.takeAction(tileId);
     }
+    hasNext() {
+        return true;
+    }
     nextAction() {
-        if (this.player.armiesToPlace() > 0)
+        if (this.currentPhase.hasNext()) {
+            this.currentPhase = this.currentPhase.nextAction();
             return this;
-        else
-            return this;
+        }
+        else {
+            return this.nextTurn;
+        }
     }
     setNextTurn(nextTurn) {
         this.nextTurn = nextTurn;

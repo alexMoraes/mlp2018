@@ -9,5 +9,6 @@ abstract class Step implements ITakesAction {
     }
 
     public abstract takeAction(tileId: number): void;
+    public abstract hasNext(): boolean;
     public abstract nextAction(): ITakesAction;
 }

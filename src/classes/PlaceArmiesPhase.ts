@@ -7,7 +7,12 @@ class PlaceArmiesPhase extends Phase {
         this.getCurrentStep().takeAction(tileId);
     }
 
+    public hasNext(): boolean {
+        return true;
+    }
+
     public nextAction(): ITakesAction {
-        return new AttackPhase(this.getPlayer());
+        if(this.getPlayer().armiesToPlace() > 0) return this;
+        else return new AttackPhase(this.getPlayer());;
     }
 }

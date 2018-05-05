@@ -11,9 +11,18 @@ class Turn implements ITakesAction {
         this.currentPhase.takeAction(tileId);
     }
 
+    public hasNext(): boolean {
+        return true;
+    }
+
     public nextAction(): ITakesAction {
-        if(this.player.armiesToPlace() > 0) return this;
-        else return this;
+        if(this.currentPhase.hasNext()) {
+            this.currentPhase = this.currentPhase.nextAction();
+            return this;
+        }
+        else {
+            return <ITakesAction> this.nextTurn;
+        }
     }
 
     public setNextTurn(nextTurn: ITakesAction): void {

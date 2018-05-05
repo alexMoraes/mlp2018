@@ -9,6 +9,10 @@ class AttackPhase extends Phase {
         this.getCurrentStep().takeAction(tileId);
     }
 
+    public hasNext(): boolean {
+        return true;
+    }
+
     public nextAction(): ITakesAction {
         return this;
     }
