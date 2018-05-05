@@ -1,3 +1,4 @@
 interface ITakesAction {
-    takeAction(tileId: number): ITakesAction;
+    takeAction(tileId: number): void;
+    nextAction(): ITakesAction;
 }

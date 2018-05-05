@@ -21,7 +21,7 @@ class RiskEngine {
     tiles : ITile[];
     players : IPlayer[];
     game_state : GameState;
-    private currentTurn: Nullable<ITakesAction> = null; // Por algum motivo esse demônio não me deixa criar uma propriedade não inicializada ¬¬
+    private currentTurn: ITakesAction;
     constructor(initial_army_number : number) {
         this.turn_player_id = 1;
         this.game_state = GameState.INITIALIZING;
@@ -34,8 +34,10 @@ class RiskEngine {
 
         // Create players
         for(var i = 1; i <= PLAYERS; i++){
-            this.players.push(new Player(i, COLORS[i-1], INITIAL_ARMY_NUMBER))
+            this.players.push(new Player(i, COLORS[i-1]))
         }
+
+        this.currentTurn = TurnFactory.getTurns(this.players)[0];
 
         // Create matrix
         for(var i = 0; i < X; i++){
@@ -72,39 +74,38 @@ class RiskEngine {
     }
 
     click(tile_number: number) {
-        var player = this.players[this.turn_player_id - 1]
-        this.currentTurn = new Turn(player);
-        this.currentTurn = this.currentTurn.takeAction(tile_number);
+        this.currentTurn.takeAction(tile_number);
+        this.currentTurn = this.currentTurn.nextAction();
 
-        switch (this.game_state) {
-            case GameState.INITIALIZING:
-                console.log("Tile " + tile_number + " clicked, current state: initializing");
-                break;
-            case GameState.POSITIONING_ARMY:
-                console.log("Tile " + tile_number + " clicked, current state: positioning army");
+        // switch (this.game_state) {
+        //     case GameState.INITIALIZING:
+        //         console.log("Tile " + tile_number + " clicked, current state: initializing");
+        //         break;
+        //     case GameState.POSITIONING_ARMY:
+        //         console.log("Tile " + tile_number + " clicked, current state: positioning army");
                 
-                var player = this.players[this.turn_player_id - 1]
-                var owner = this.tiles[tile_number].owner
+        //         var player = this.players[this.turn_player_id - 1]
+        //         var owner = this.tiles[tile_number].owner
 
-                if (owner == 0 || owner == player.id) {
-                    this.tiles[tile_number].owner = player.id;
-                    this.tiles[tile_number].armies += 1;
-                    player.army_to_position -= 1;
-                    this.turn_player_id = player.id == 1 ? 2 : 1;
-                    if (this.players[0].army_to_position == 0 && this.players[1].army_to_position == 0)
-                        this.game_state = GameState.SELECTING_ATTACK_SOURCE
-                }
-                break;
-            case GameState.SELECTING_ATTACK_SOURCE:
-                console.log("Tile " + tile_number + " clicked, current state: selecting attack source");
+        //         if (owner == 0 || owner == player.id) {
+        //             this.tiles[tile_number].owner = player.id;
+        //             this.tiles[tile_number].armies += 1;
+        //             player.army_to_position -= 1;
+        //             this.turn_player_id = player.id == 1 ? 2 : 1;
+        //             if (this.players[0].army_to_position == 0 && this.players[1].army_to_position == 0)
+        //                 this.game_state = GameState.SELECTING_ATTACK_SOURCE
+        //         }
+        //         break;
+        //     case GameState.SELECTING_ATTACK_SOURCE:
+        //         console.log("Tile " + tile_number + " clicked, current state: selecting attack source");
 
-                break;
-            case GameState.SELECTING_ATTACK_TARGET:
-                console.log("Tile " + tile_number + " clicked, current state: selecting attack target");
-                break;
-            default:
+        //         break;
+        //     case GameState.SELECTING_ATTACK_TARGET:
+        //         console.log("Tile " + tile_number + " clicked, current state: selecting attack target");
+        //         break;
+        //     default:
                 
-                break;
-        }
+        //         break;
+        // }
     }
 }

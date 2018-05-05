@@ -1,5 +1,5 @@
 class TurnFactory {
-    public getTurns(players: Array<IPlayer>): Array<ITakesAction> {
+    public static getTurns(players: Array<IPlayer>): Array<ITakesAction> {
         var turns = new Array<Turn>();
         players.forEach(player => {
             turns.push(new Turn(player));
