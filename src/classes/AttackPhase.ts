@@ -2,7 +2,7 @@
 
 class AttackPhase extends Phase {
     constructor(player: IPlayer) {
-        super(player, new SelectTileStep(player));
+        super(player, new SelectOwnerTileToAttackStep(player));
     }
 
     public takeAction(tile: ITile): boolean {
@@ -14,6 +14,10 @@ class AttackPhase extends Phase {
     }
 
     public nextAction(): ITakesAction {
-        return this;
+        if(this.getCurrentStep().hasNext()) {
+            return this.getCurrentStep().nextAction();
+        } else {
+            return new PlaceArmiesPhase(this.getPlayer());
+        }
     }
 }

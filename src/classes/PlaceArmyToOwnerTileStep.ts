@@ -2,8 +2,7 @@
 
 class PlaceArmyToOwnerTileStep extends Step {
     public takeAction(tile: ITile): boolean {
-        this.getPlayer().selectTile(tile);
-        return this.getPlayer().placeArmies(1);
+        return this.getPlayer().placeArmies(tile, 1);
     }
 
     public hasNext(): boolean {

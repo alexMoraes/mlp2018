@@ -43,10 +43,14 @@ function draw() {
     for (var i = 0; i < risk.tiles.length; i++) {
         tile = risk.tiles[i]
         if (tile.owner != 0) {
-            color = risk.players[tile.owner - 1].color;
+            var player = risk.players[tile.owner - 1]
+            color = player.color;
             x = risk.tiles[i].center[0];
             y = risk.tiles[i].center[1];
-            fill(color[0], color[1], color[2]);
+            if(player.selectedTile != null && player.selectedTile.id == tile.id)
+                fill(color[0]-100, color[1]-100, color[2]-100);
+            else
+                fill(color[0], color[1], color[2]);
             ellipse(x, y, 40, 40);
             fill(0, 0, 0);
             text(String(tile.armies), x - 7, y + 9);

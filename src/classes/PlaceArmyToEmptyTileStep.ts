@@ -2,8 +2,7 @@
 
 class PlaceArmyToEmptyTileStep extends Step {
     public takeAction(tile: ITile): boolean {
-        this.getPlayer().selectTile(tile);
-        return this.getPlayer().takeTile();
+        return this.getPlayer().takeTile(tile);
     }
 
     public hasNext(): boolean {

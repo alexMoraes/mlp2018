@@ -3,6 +3,7 @@ interface ITile {
     owner: number
     armies: number
     borderers: ITile[]
+    isAbleToAttack(): boolean
     addArmy(armies: number): void
     setOwner(ownerId: number): void
     hasOwner(): boolean

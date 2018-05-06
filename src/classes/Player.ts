@@ -9,13 +9,13 @@ class Player implements IPlayer {
         this.armies = this.armies + armies;
     }
 
-    public placeArmies(armies: number): boolean {
-        if(this.selectedTile) {
-            if(!this.selectedTile.hasOwner()) {
+    public placeArmies(tile: ITile, armies: number): boolean {
+        if(tile) {
+            if(!tile.hasOwner()) {
                 // must have an owner at this time of game
                 return false;
             }
-            this.selectedTile.addArmy(armies);
+            tile.addArmy(armies);
             this.armies -= armies;
             return true;
         } else {
@@ -28,8 +28,8 @@ class Player implements IPlayer {
     }
 
     public selectTile(tile: ITile): boolean {
-        this.selectedTile = null;
-        if(tile.owner == this.id || !tile.hasOwner()) {
+        this.clearSelectedTile();
+        if(tile.owner == this.id) {
             this.selectedTile = tile;
             return true;
         } else {
@@ -37,11 +37,15 @@ class Player implements IPlayer {
         }
     }
 
-    public takeTile(): boolean {
-        if(this.selectedTile) {
-            if(!this.selectedTile.hasOwner()) {
-                this.selectedTile.setOwner(this.id);
-                this.selectedTile.addArmy(1);
+    public clearSelectedTile(): void {
+        this.selectedTile = null;
+    }
+
+    public takeTile(tile: ITile): boolean {
+        if(tile) {
+            if(!tile.hasOwner()) {
+                tile.setOwner(this.id);
+                tile.addArmy(1);
                 this.armies -= 1;
                 return true;
             } else {

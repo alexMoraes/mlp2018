@@ -1,9 +1,10 @@
 interface IPlayer {
     id: number
-    takeTile(): boolean
+    takeTile(tile: ITile): boolean
     giveArmies(armies: number): void
-    placeArmies(armies: number): boolean
+    placeArmies(tile: ITile, armies: number): boolean
     armiesToPlace(): number
     selectTile(tile: ITile): boolean
+    clearSelectedTile(): void 
     getSelectedTile(): Nullable<ITile>
 }

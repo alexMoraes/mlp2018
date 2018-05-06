@@ -17,6 +17,9 @@ class Tile implements ITile {
         this.armies = 0;
         this.center = [0, 0];
     }
+    isAbleToAttack() : boolean{
+        return this.armies > 1;
+    }
     addArmy(armies: number): void {
         this.armies += armies;
     }

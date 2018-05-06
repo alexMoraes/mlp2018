@@ -14,7 +14,7 @@ class Phase {
 /// <reference path="Phase.ts"/>
 class AttackPhase extends Phase {
     constructor(player) {
-        super(player, new SelectTileStep(player));
+        super(player, new SelectOwnerTileToAttackStep(player));
     }
     takeAction(tile) {
         return this.getCurrentStep().takeAction(tile);
@@ -23,7 +23,12 @@ class AttackPhase extends Phase {
         return true;
     }
     nextAction() {
-        return this;
+        if (this.getCurrentStep().hasNext()) {
+            return this.getCurrentStep().nextAction();
+        }
+        else {
+            return new PlaceArmiesPhase(this.getPlayer());
+        }
     }
 }
 class ChooseTilesPhase extends Phase {
@@ -76,8 +81,7 @@ class Step {
 /// <reference path="Step.ts"/>
 class PlaceArmyToEmptyTileStep extends Step {
     takeAction(tile) {
-        this.getPlayer().selectTile(tile);
-        return this.getPlayer().takeTile();
+        return this.getPlayer().takeTile(tile);
     }
     hasNext() {
         return true;
@@ -89,8 +93,7 @@ class PlaceArmyToEmptyTileStep extends Step {
 /// <reference path="Step.ts"/>
 class PlaceArmyToOwnerTileStep extends Step {
     takeAction(tile) {
-        this.getPlayer().selectTile(tile);
-        return this.getPlayer().placeArmies(1);
+        return this.getPlayer().placeArmies(tile, 1);
     }
     hasNext() {
         return true;
@@ -110,13 +113,13 @@ class Player {
     giveArmies(armies) {
         this.armies = this.armies + armies;
     }
-    placeArmies(armies) {
-        if (this.selectedTile) {
-            if (!this.selectedTile.hasOwner()) {
+    placeArmies(tile, armies) {
+        if (tile) {
+            if (!tile.hasOwner()) {
                 // must have an owner at this time of game
                 return false;
             }
-            this.selectedTile.addArmy(armies);
+            tile.addArmy(armies);
             this.armies -= armies;
             return true;
         }
@@ -128,8 +131,8 @@ class Player {
         return this.armies;
     }
     selectTile(tile) {
-        this.selectedTile = null;
-        if (tile.owner == this.id || !tile.hasOwner()) {
+        this.clearSelectedTile();
+        if (tile.owner == this.id) {
             this.selectedTile = tile;
             return true;
         }
@@ -137,11 +140,14 @@ class Player {
             return false;
         }
     }
-    takeTile() {
-        if (this.selectedTile) {
-            if (!this.selectedTile.hasOwner()) {
-                this.selectedTile.setOwner(this.id);
-                this.selectedTile.addArmy(1);
+    clearSelectedTile() {
+        this.selectedTile = null;
+    }
+    takeTile(tile) {
+        if (tile) {
+            if (!tile.hasOwner()) {
+                tile.setOwner(this.id);
+                tile.addArmy(1);
                 this.armies -= 1;
                 return true;
             }
@@ -256,15 +262,78 @@ class RiskEngine {
     }
 }
 /// <reference path="Step.ts"/>
-class SelectTileStep extends Step {
+class SelectEnemyTileToAttackStep extends Step {
+    constructor() {
+        super(...arguments);
+        this._validAction = true;
+    }
     takeAction(tile) {
-        return this.getPlayer().selectTile(tile);
+        if (tile.owner == this.getPlayer().id) {
+            this.getPlayer().selectTile(tile);
+            this._validAction = false;
+        }
+        else {
+            var ownerTile = this.getPlayer().getSelectedTile();
+            if (ownerTile != null) {
+                if (ownerTile.isAbleToAttack()) {
+                    var ownerTileId = ownerTile.id;
+                    if (tile.borderers.some(b => b.id == ownerTileId) && tile.owner != this.getPlayer().id) {
+                        tile.addArmy(-1);
+                        if (tile.armies == 0) {
+                            tile.setOwner(this.getPlayer().id);
+                            tile.addArmy(1);
+                            ownerTile.addArmy(-1);
+                        }
+                        this.getPlayer().clearSelectedTile();
+                        this._validAction = true;
+                    }
+                    else {
+                        this._validAction = false;
+                    }
+                }
+                else {
+                    this._validAction = false;
+                }
+            }
+            else {
+                this._validAction = false;
+            }
+        }
+        return this._validAction;
+    }
+    hasNext() {
+        return !this._validAction;
+    }
+    nextAction() {
+        if (this._validAction)
+            return new SelectOwnerTileToAttackStep(this.getPlayer());
+        else
+            return this;
+    }
+}
+/// <reference path="Step.ts"/>
+class SelectOwnerTileToAttackStep extends Step {
+    constructor() {
+        super(...arguments);
+        this._validAction = true;
+    }
+    takeAction(tile) {
+        if (this.getPlayer().selectTile(tile)) {
+            this._validAction = tile.isAbleToAttack();
+        }
+        else {
+            this._validAction = false;
+        }
+        return this._validAction;
     }
     hasNext() {
         return true;
     }
     nextAction() {
-        return this;
+        if (this._validAction)
+            return new SelectEnemyTileToAttackStep(this.getPlayer());
+        else
+            return this;
     }
 }
 class Tile {
@@ -281,6 +350,9 @@ class Tile {
         this.owner = 0;
         this.armies = 0;
         this.center = [0, 0];
+    }
+    isAbleToAttack() {
+        return this.armies > 1;
     }
     addArmy(armies) {
         this.armies += armies;
