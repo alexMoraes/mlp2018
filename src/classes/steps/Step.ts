@@ -11,4 +11,5 @@ abstract class Step implements ITakesAction {
     public abstract takeAction(tile: ITile): boolean;
     public abstract hasNext(): boolean;
     public abstract nextAction(): ITakesAction;
+    public abstract getMessage(): String;
 }

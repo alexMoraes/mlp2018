@@ -36,7 +36,7 @@ function setup() {
     }
     img.updatePixels();
     image(img, 0, 0);
-    risk.gameState = GameState.POSITIONING_ARMY;
+    console.log(risk.getMessage());
 }
 
 function draw() {
@@ -47,7 +47,7 @@ function draw() {
             color = player.color;
             x = risk.tiles[i].center[0];
             y = risk.tiles[i].center[1];
-            if(player.selectedTile != null && player.selectedTile.id == tile.id)
+            if (player.selectedTile != null && player.selectedTile.id == tile.id)
                 fill(color[0]-100, color[1]-100, color[2]-100);
             else
                 fill(color[0], color[1], color[2]);
@@ -62,7 +62,8 @@ function mouseClicked() {
     var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
     if (tileId > 0) {
         tileIndex = tileId - 1;
-        risk.click(tileIndex);
+        risk.action(tileIndex);
+        console.log(risk.getMessage());
         draw();
     }
 }
