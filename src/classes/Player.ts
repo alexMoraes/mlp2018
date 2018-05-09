@@ -60,6 +60,10 @@ class Player implements IPlayer {
         return this.selectedTile;
     }
 
+    public getTotalTiles(): number {
+        return this.ownedTiles.length
+    }
+
     public ownsTile(tile: ITile): boolean {
         return tile.owner == this.id;
     }
