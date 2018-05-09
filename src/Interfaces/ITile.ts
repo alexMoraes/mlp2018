@@ -10,4 +10,5 @@ interface ITile {
     addSqm(matrix: number[][]) : number
     calculateCenter(): void
     calculateBorderers(matrix:number[][], tiles:ITile[]): void
+    setArmy(armies: number): void
 }

@@ -23,6 +23,9 @@ class Tile implements ITile {
     addArmy(armies: number): void {
         this.armies += armies;
     }
+    setArmy(armies: number): void {
+        this.armies = armies;
+    }
     hasOwner(): boolean {
         return this.owner > 0;
     }

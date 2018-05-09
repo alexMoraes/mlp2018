@@ -2,7 +2,7 @@
 
 class AttackPhase extends Phase {
     constructor(player: IPlayer) {
-        super(player, new SelectOwnerTileToAttackStep(player));
+        super(player, new ReinforceArmyStep(player));
     }
 
     public takeAction(tile: ITile): boolean {

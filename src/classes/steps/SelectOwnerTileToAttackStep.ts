@@ -22,4 +22,9 @@ class SelectOwnerTileToAttackStep extends Step {
         else
             return this;
     }
+
+    public getMessage(): String {
+        var player = this.getPlayer()
+        return "Jogador " + player.id + ": escolha um de seus territorios para atacar.";
+    }
 }

@@ -30,4 +30,8 @@ class Turn implements ITakesAction {
     public setNextTurn(nextTurn: ITakesAction): void {
         this.nextTurn = nextTurn;
     }
+
+    public getMessage(): String {
+        return this.currentPhase.getMessage();
+    }
 }

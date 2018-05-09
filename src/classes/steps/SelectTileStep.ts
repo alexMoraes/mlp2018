@@ -1,8 +1,8 @@
 /// <reference path="Step.ts"/>
 
-class PlaceArmyToOwnerTileStep extends Step {
+class SelectTileStep extends Step {
     public takeAction(tile: ITile): boolean {
-        return this.getPlayer().placeArmies(tile, 1);
+        return this.getPlayer().selectTile(tile);
     }
 
     public hasNext(): boolean {
@@ -11,5 +11,9 @@ class PlaceArmyToOwnerTileStep extends Step {
 
     public nextAction(): ITakesAction {
         return this;
+    }
+
+    public getMessage(): String {
+        return "N sei o q isso faz";
     }
 }

@@ -59,4 +59,8 @@ class Player implements IPlayer {
     public getSelectedTile(): Nullable<ITile> {
         return this.selectedTile;
     }
+
+    public ownsTile(tile: ITile): boolean {
+        return tile.owner == this.id;
+    }
 }
