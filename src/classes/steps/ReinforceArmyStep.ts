@@ -3,7 +3,7 @@
 class ReinforceArmyStep extends Step {
     public constructor(player: IPlayer) {
         super(player);
-        this.getPlayer().giveArmies(Math.max(player.getTotalTiles() / 3, 3));
+        this.getPlayer().giveArmies(5);
     }
 
     public takeAction(tile: ITile): boolean {

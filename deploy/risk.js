@@ -59,9 +59,6 @@ class Player {
     getSelectedTile() {
         return this.selectedTile;
     }
-    getTotalTiles() {
-        return this.ownedTiles.length;
-    }
     ownsTile(tile) {
         return tile.owner == this.id;
     }
@@ -401,7 +398,7 @@ class PlaceArmyToOwnerTileStep extends Step {
 class ReinforceArmyStep extends Step {
     constructor(player) {
         super(player);
-        this.getPlayer().giveArmies(Math.max(player.getTotalTiles() / 3, 3));
+        this.getPlayer().giveArmies(5);
     }
     takeAction(tile) {
         var player = this.getPlayer();
