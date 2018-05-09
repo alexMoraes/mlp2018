@@ -59,6 +59,9 @@ class Player {
     getSelectedTile() {
         return this.selectedTile;
     }
+    ownsTile(tile) {
+        return tile.owner == this.id;
+    }
 }
 const X = 1000;
 const Y = 600;
@@ -145,6 +148,9 @@ class Tile {
     }
     addArmy(armies) {
         this.armies += armies;
+    }
+    setArmy(armies) {
+        this.armies = armies;
     }
     hasOwner() {
         return this.owner > 0;
@@ -293,7 +299,7 @@ class Phase {
 /// <reference path="Phase.ts"/>
 class AttackPhase extends Phase {
     constructor(player) {
-        super(player, new SelectOwnerTileToAttackStep(player));
+        super(player, new ReinforceArmyStep(player));
     }
     takeAction(tile) {
         return this.getCurrentStep().takeAction(tile);
@@ -389,6 +395,35 @@ class PlaceArmyToOwnerTileStep extends Step {
     }
 }
 /// <reference path="Step.ts"/>
+class ReinforceArmyStep extends Step {
+    constructor(player) {
+        super(player);
+        this.getPlayer().giveArmies(5);
+    }
+    takeAction(tile) {
+        var player = this.getPlayer();
+        if (tile.owner == player.id) {
+            return player.placeArmies(tile, 1);
+        }
+        else {
+            return false;
+        }
+    }
+    hasNext() {
+        return true;
+    }
+    nextAction() {
+        if (this.getPlayer().armiesToPlace() == 0)
+            return new SelectOwnerTileToAttackStep(this.getPlayer());
+        else
+            return this;
+    }
+    getMessage() {
+        var player = this.getPlayer();
+        return "Jogador " + player.id + ": posicione exercitos em seus territorios. " + player.armiesToPlace() + " exercitos restantes";
+    }
+}
+/// <reference path="Step.ts"/>
 class SelectEnemyTileToAttackStep extends Step {
     constructor() {
         super(...arguments);
@@ -405,11 +440,28 @@ class SelectEnemyTileToAttackStep extends Step {
                 if (ownerTile.isAbleToAttack()) {
                     var ownerTileId = ownerTile.id;
                     if (tile.borderers.some(b => b.id == ownerTileId) && tile.owner != this.getPlayer().id) {
-                        tile.addArmy(-1);
-                        if (tile.armies == 0) {
+                        var armiesAttacking = ownerTile.armies;
+                        var armiesDefending = tile.armies;
+                        var attackRandom = Math.floor(Math.random() * armiesAttacking + 1);
+                        var defenseRandom = Math.floor(Math.random() * armiesDefending + 1);
+                        var diff = Math.abs(attackRandom - defenseRandom);
+                        console.log("Ataque tirou " + attackRandom);
+                        console.log("Defesa tirou " + defenseRandom);
+                        if (attackRandom > defenseRandom) { // Attack wins
                             tile.setOwner(this.getPlayer().id);
-                            tile.addArmy(1);
-                            ownerTile.addArmy(-1);
+                            tile.setArmy(diff);
+                            console.log("Ataque venceu!");
+                            ownerTile.setArmy(1);
+                        }
+                        else if (attackRandom == defenseRandom) { // Tie
+                            tile.setArmy(1);
+                            ownerTile.setArmy(1);
+                            console.log("Empate!");
+                        }
+                        else { // Defense wins
+                            ownerTile.setArmy(1);
+                            tile.setArmy(diff);
+                            console.log("Defesa venceu!");
                         }
                         this.getPlayer().clearSelectedTile();
                         this._validAction = true;
@@ -433,7 +485,7 @@ class SelectEnemyTileToAttackStep extends Step {
     }
     nextAction() {
         if (this._validAction)
-            return new SelectOwnerTileToAttackStep(this.getPlayer());
+            return new ReinforceArmyStep(this.getPlayer());
         else
             return this;
     }

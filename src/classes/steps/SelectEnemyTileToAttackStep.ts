@@ -13,11 +13,29 @@ class SelectEnemyTileToAttackStep extends Step {
                 if(ownerTile.isAbleToAttack()) {
                     var ownerTileId = ownerTile.id;
                     if(tile.borderers.some(b => b.id == ownerTileId) && tile.owner != this.getPlayer().id) {
-                        tile.addArmy(-1);
-                        if(tile.armies == 0) {
-                            tile.setOwner(this.getPlayer().id)
-                            tile.addArmy(1);
-                            ownerTile.addArmy(-1);
+                        var armiesAttacking = ownerTile.armies;
+                        var armiesDefending = tile.armies;
+                        var attackRandom = Math.floor(Math.random()*armiesAttacking + 1);
+                        var defenseRandom = Math.floor(Math.random()*armiesDefending + 1);
+                        var diff = Math.abs(attackRandom - defenseRandom);
+
+                        console.log("Ataque tirou " + attackRandom);
+                        console.log("Defesa tirou " + defenseRandom);
+
+                        if (attackRandom > defenseRandom) { // Attack wins
+                            tile.setOwner(this.getPlayer().id);
+                            tile.setArmy(diff);
+                            console.log("Ataque venceu!");
+                        ownerTile.setArmy(1);
+                        } else if (attackRandom == defenseRandom) { // Tie
+                            tile.setArmy(1);
+                            ownerTile.setArmy(1);
+                            console.log("Empate!");                           
+                        } else { // Defense wins
+                            ownerTile.setArmy(1);
+                            tile.setArmy(diff);
+                            console.log("Defesa venceu!");
+                                                        
                         }
                         this.getPlayer().clearSelectedTile();
                         this._validAction = true;
@@ -40,7 +58,7 @@ class SelectEnemyTileToAttackStep extends Step {
 
     public nextAction(): ITakesAction {
         if(this._validAction)
-            return new SelectOwnerTileToAttackStep(this.getPlayer());
+            return new ReinforceArmyStep(this.getPlayer());
         else
             return this;
     }

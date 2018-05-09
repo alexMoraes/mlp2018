@@ -7,4 +7,5 @@ interface IPlayer {
     selectTile(tile: ITile): boolean
     clearSelectedTile(): void 
     getSelectedTile(): Nullable<ITile>
+    ownsTile(tile: ITile): boolean
 }
