@@ -69,6 +69,6 @@ class Player implements IPlayer {
         return this.ownedTiles.length;
     }
     public attackOptions(): Array<ITile> {
-        return this.ownedTiles.filter(x => x.armies > 1);
+        return this.ownedTiles.filter(x => x.armies > 1 && x.borderers.filter(y => y.owner != this.id).length > 0);
     }
 }

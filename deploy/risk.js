@@ -130,12 +130,12 @@ class Player {
         return this.ownedTiles.length;
     }
     attackOptions() {
-        return this.ownedTiles.filter(x => x.armies > 1);
+        return this.ownedTiles.filter(x => x.armies > 1 && x.borderers.filter(y => y.owner != this.id).length > 0);
     }
 }
 const X = 1000;
 const Y = 600;
-const TILES = 8;
+const TILES = 52;
 const PLAYERS = 2;
 const COLORS = [[255, 0, 0],
     [0, 0, 255]];
@@ -521,9 +521,9 @@ class DeployPhase extends TurnPhase {
         return "Jogador " + this.player.id + ": escolha um territorio para reforcar. Voce possui " + this.player.armiesToPlace() + " exercitos restantes";
     }
     setup() {
-        var armiesToDeploy = this.player.totalTiles() / 3;
+        var armiesToDeploy = Math.floor(this.player.totalTiles() / 3);
         armiesToDeploy = Math.max(armiesToDeploy, 3);
-        this.player.giveArmies(armiesToDeploy);
+        this.player.giveArmies(armiesToDeploy - this.player.armiesToPlace());
     }
     takeAction(tile) {
         this.player.placeArmies(tile, 1);

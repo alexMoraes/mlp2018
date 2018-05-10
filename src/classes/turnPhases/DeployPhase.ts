@@ -6,9 +6,9 @@ class DeployPhase extends TurnPhase {
     }
 
     public setup(): void {
-        var armiesToDeploy = this.player.totalTiles() / 3;
+        var armiesToDeploy = Math.floor(this.player.totalTiles() / 3);
         armiesToDeploy = Math.max(armiesToDeploy, 3);
-        this.player.giveArmies(armiesToDeploy);
+        this.player.giveArmies(armiesToDeploy - this.player.armiesToPlace());
     }
 
     public takeAction(tile: ITile): void {
