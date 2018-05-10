@@ -1,6 +1,6 @@
 const X = 1000;
 const Y = 600;
-const TILES = 4*3*2*2;
+const TILES = 8;
 const PLAYERS = 2;
 const COLORS = [[255,0,0],
                 [0,0,255]];

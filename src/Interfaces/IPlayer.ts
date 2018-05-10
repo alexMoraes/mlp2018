@@ -1,6 +1,6 @@
 interface IPlayer {
     id: number
-    takeTile(tile: ITile): boolean
+    takeTile(tile: ITile, armies: number): boolean
     giveArmies(armies: number): void
     placeArmies(tile: ITile, armies: number): boolean
     armiesToPlace(): number
@@ -9,4 +9,5 @@ interface IPlayer {
     getSelectedTile(): Nullable<ITile>
     ownsTile(tile: ITile): boolean
     totalTiles(): number
+    attackOptions(): Array<ITile> 
 }

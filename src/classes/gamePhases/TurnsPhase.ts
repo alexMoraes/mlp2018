@@ -12,7 +12,7 @@ class TurnsPhase extends GamePhase {
     }
     
     public finished(): boolean {
-        return false;
+        return this.players.filter(x => x.totalTiles() > 0).length == 1;
     }
 
     public takeAction(tile: ITile): void {

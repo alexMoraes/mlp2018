@@ -1,9 +1,6 @@
 /// <reference path="TurnPhase.ts"/>
 
 class DeployPhase extends TurnPhase {
-    constructor(player: IPlayer) {
-        super(player);
-    }
     public getMessage(): string {
         return "Jogador " + this.player.id + ": escolha um territorio para reforcar. Voce possui " + this.player.armiesToPlace() + " exercitos restantes";
     }

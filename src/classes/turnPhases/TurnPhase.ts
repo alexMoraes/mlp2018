@@ -1,6 +1,5 @@
 abstract class TurnPhase implements ITakesAction {
     protected player: IPlayer;
-    protected stepPointer: number =0;
     constructor(player: IPlayer) {
         this.player = player;
     }

@@ -12,7 +12,7 @@ class SetupBoardPhase extends GamePhase {
     }
 
     public takeAction(tile: ITile): void {
-        var success = this.players[this.playerPointer].takeTile(tile);
+        var success = this.players[this.playerPointer].takeTile(tile, 1);
         if(success){
             this.tilesTaken++;
             this.nextPlayer();

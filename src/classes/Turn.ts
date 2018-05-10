@@ -6,13 +6,16 @@ class Turn implements ITakesAction {
     constructor(player: IPlayer) {
         this.player = player;
         this.phases = [
-            new DeployPhase(player)
+            new DeployPhase(player),
+            new AttackPhase(player)
         ]
         this.currentPhase = this.phases[0];
     }
 
     private nextPhase(): void {
-        this.currentPhase = this.phases[this.phasePointer++];
+        this.phasePointer++;
+        this.currentPhase = this.phases[this.phasePointer];
+        this.initialized = false;
     }
 
     public getMessage(): string {

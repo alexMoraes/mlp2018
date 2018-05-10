@@ -1,4 +1,66 @@
 "use strict";
+class Die {
+    constructor() {
+        this.result = 0;
+    }
+    roll() {
+        this.result = Math.ceil(Math.random() * 6);
+    }
+    getResult() {
+        return this.result;
+    }
+}
+class Attack {
+    constructor(player) {
+        this.attackingTile = null;
+        this.defendingTile = null;
+        this.player = player;
+    }
+    setAttackingTile(tile) {
+        this.attackingTile = tile;
+    }
+    setDefendingTile(tile) {
+        this.defendingTile = tile;
+    }
+    resolve() {
+        if (this.attackingTile == null || this.defendingTile == null)
+            return;
+        var attackers = Math.min(this.attackingTile.armies - 1, 3);
+        var defenders = Math.min(this.defendingTile.armies, 2);
+        var attackingDice = [];
+        var defendingDice = [];
+        for (var i = 0; i < attackers; i++) {
+            var die = new Die();
+            die.roll();
+            attackingDice.push(die);
+        }
+        attackingDice = attackingDice.sort((x, y) => y.getResult() - x.getResult());
+        for (var i = 0; i < defenders; i++) {
+            var die = new Die();
+            die.roll();
+            defendingDice.push(die);
+        }
+        defendingDice = defendingDice.sort((x, y) => y.getResult() - x.getResult());
+        var takenDice = Math.min(defenders, attackers);
+        for (var i = 0; i < takenDice; i++) {
+            if (attackingDice[i].getResult() > defendingDice[i].getResult())
+                this.defendingTile.addArmy(-1);
+            else {
+                this.attackingTile.addArmy(-1);
+                attackers--;
+            }
+        }
+        if (this.defendingTile.armies == 0) {
+            this.defendingTile.owner = 0;
+            this.player.takeTile(this.defendingTile, attackers);
+            this.attackingTile.addArmy(-attackers);
+        }
+    }
+    reset() {
+        this.attackingTile = null;
+        this.defendingTile = null;
+    }
+}
 class Player {
     constructor(id, color, armies) {
         this.id = id;
@@ -40,14 +102,13 @@ class Player {
     clearSelectedTile() {
         this.selectedTile = null;
     }
-    takeTile(tile) {
+    takeTile(tile, armies) {
         if (tile) {
             if (!tile.hasOwner()) {
                 tile.setOwner(this.id);
-                console.debug("Pushing");
                 this.ownedTiles.push(tile);
-                tile.addArmy(1);
-                this.armies -= 1;
+                tile.addArmy(armies);
+                this.armies -= armies;
                 return true;
             }
             else {
@@ -65,12 +126,16 @@ class Player {
         return tile.owner == this.id;
     }
     totalTiles() {
+        this.ownedTiles = this.ownedTiles.filter(x => x.owner == this.id);
         return this.ownedTiles.length;
+    }
+    attackOptions() {
+        return this.ownedTiles.filter(x => x.armies > 1);
     }
 }
 const X = 1000;
 const Y = 600;
-const TILES = 4 * 3 * 2 * 2;
+const TILES = 8;
 const PLAYERS = 2;
 const COLORS = [[255, 0, 0],
     [0, 0, 255]];
@@ -260,12 +325,15 @@ class Turn {
         this.initialized = false;
         this.player = player;
         this.phases = [
-            new DeployPhase(player)
+            new DeployPhase(player),
+            new AttackPhase(player)
         ];
         this.currentPhase = this.phases[0];
     }
     nextPhase() {
-        this.currentPhase = this.phases[this.phasePointer++];
+        this.phasePointer++;
+        this.currentPhase = this.phases[this.phasePointer];
+        this.initialized = false;
     }
     getMessage() {
         if (!this.initialized) {
@@ -314,7 +382,7 @@ class SetupBoardPhase extends GamePhase {
         return this.tilesTaken == this.tiles.length;
     }
     takeAction(tile) {
-        var success = this.players[this.playerPointer].takeTile(tile);
+        var success = this.players[this.playerPointer].takeTile(tile, 1);
         if (success) {
             this.tilesTaken++;
             this.nextPlayer();
@@ -335,7 +403,7 @@ class TurnsPhase extends GamePhase {
         this.currentTurn = new Turn(this.players[this.playerPointer]);
     }
     finished() {
-        return false;
+        return this.players.filter(x => x.totalTiles() > 0).length == 1;
     }
     takeAction(tile) {
         this.currentTurn.takeAction(tile);
@@ -346,19 +414,109 @@ class TurnsPhase extends GamePhase {
         return this.currentTurn.getMessage();
     }
 }
-class Step {
+class SelectAttackerStep {
+    constructor(player, attack) {
+        this.success = false;
+        this.player = player;
+        this.attack = attack;
+    }
+    getMessage() {
+        return "Jogador " + this.player.id + ": escolha um de seus territorios para atacar.";
+    }
+    takeAction(tile) {
+        if (!tile.isAbleToAttack())
+            this.success = false;
+        else {
+            this.success = this.player.selectTile(tile);
+            this.attack.setAttackingTile(tile);
+        }
+    }
+    finished() {
+        return this.success;
+    }
 }
+class SelectDefenderStep {
+    constructor(player, attack) {
+        this.success = false;
+        this.player = player;
+        this.attack = attack;
+    }
+    getMessage() {
+        return "Jogador " + this.player.id + ": escolha um territorio inimigo para atacar.";
+    }
+    takeAction(tile) {
+        if (tile.owner == this.player.id) {
+            this.player.selectTile(tile);
+            this.success = false;
+        }
+        else {
+            var ownerTile = this.player.getSelectedTile();
+            if (ownerTile != null) {
+                var ownerTileId = ownerTile.id;
+                if (tile.borderers.some(b => b.id == ownerTileId) && tile.owner != this.player.id) {
+                    this.attack.setDefendingTile(tile);
+                    this.success = true;
+                }
+                else {
+                    this.success = false;
+                }
+            }
+            else {
+                this.success = false;
+            }
+        }
+    }
+    finished() {
+        return this.success;
+    }
+}
+// abstract class Step implements ITakesAction {
+//     public abstract getMessage(): string;
+//     public abstract takeAction(tile: ITile): void;
+// }
 class TurnPhase {
     constructor(player) {
-        this.stepPointer = 0;
         this.player = player;
     }
 }
 /// <reference path="TurnPhase.ts"/>
-class DeployPhase extends TurnPhase {
+class AttackPhase extends TurnPhase {
     constructor(player) {
         super(player);
+        this.stepPointer = 0;
+        this.attack = new Attack(player);
+        this.steps = [
+            new SelectAttackerStep(player, this.attack),
+            new SelectDefenderStep(player, this.attack)
+        ];
+        this.currentStep = this.steps[0];
     }
+    nextSetp() {
+        this.stepPointer = (this.stepPointer + 1) % this.steps.length;
+        this.currentStep = this.steps[this.stepPointer];
+    }
+    getMessage() {
+        return this.currentStep.getMessage();
+    }
+    setup() {
+    }
+    takeAction(tile) {
+        this.currentStep.takeAction(tile);
+        if (this.currentStep.finished()) {
+            this.nextSetp();
+            if (this.stepPointer == 0) {
+                this.attack.resolve();
+                this.attack.reset();
+                this.player.clearSelectedTile();
+            }
+        }
+    }
+    finished() {
+        return this.player.attackOptions().length == 0;
+    }
+}
+/// <reference path="TurnPhase.ts"/>
+class DeployPhase extends TurnPhase {
     getMessage() {
         return "Jogador " + this.player.id + ": escolha um territorio para reforcar. Voce possui " + this.player.armiesToPlace() + " exercitos restantes";
     }
