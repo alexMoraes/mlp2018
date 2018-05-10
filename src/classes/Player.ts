@@ -11,7 +11,7 @@ class Player implements IPlayer {
 
     public placeArmies(tile: ITile, armies: number): boolean {
         if(tile) {
-            if(!tile.hasOwner()) {
+            if(!tile.hasOwner() || tile.owner != this.id) {
                 // must have an owner at this time of game
                 return false;
             }
@@ -45,6 +45,8 @@ class Player implements IPlayer {
         if(tile) {
             if(!tile.hasOwner()) {
                 tile.setOwner(this.id);
+                console.debug("Pushing");
+                this.ownedTiles.push(tile);
                 tile.addArmy(1);
                 this.armies -= 1;
                 return true;
@@ -62,5 +64,8 @@ class Player implements IPlayer {
 
     public ownsTile(tile: ITile): boolean {
         return tile.owner == this.id;
+    }
+    public totalTiles(): number {
+        return this.ownedTiles.length;
     }
 }

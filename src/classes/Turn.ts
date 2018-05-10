@@ -1,37 +1,36 @@
 class Turn implements ITakesAction {
     private player: IPlayer;
-    private nextTurn: Nullable<ITakesAction> = null;
-    private currentPhase: ITakesAction;
-    public constructor(player: IPlayer){
+    private phases: Array<TurnPhase>;
+    private phasePointer: number = 0;
+    private currentPhase: TurnPhase;
+    constructor(player: IPlayer) {
         this.player = player;
-        this.currentPhase = new ChooseTilesPhase(player);
+        this.phases = [
+            new DeployPhase(player)
+        ]
+        this.currentPhase = this.phases[0];
     }
 
-    public takeAction(tile: ITile): boolean {
-        return this.currentPhase.takeAction(tile);
+    private nextPhase(): void {
+        this.currentPhase = this.phases[this.phasePointer++];
     }
 
-    public hasNext(): boolean {
-        return true;
-    }
-
-    public nextAction(): ITakesAction {
-        if(this.currentPhase.hasNext()) {
-            this.currentPhase = this.currentPhase.nextAction();
-            return this;
+    public getMessage(): string {
+        if(!this.initialized){
+            this.currentPhase.setup();
+            this.initialized = true;
         }
-        else {
-            var next = this.nextTurn;
-            this.currentPhase = this.currentPhase.nextAction();
-            return <ITakesAction> next;
-        }
-    }
-
-    public setNextTurn(nextTurn: ITakesAction): void {
-        this.nextTurn = nextTurn;
-    }
-
-    public getMessage(): String {
         return this.currentPhase.getMessage();
+    }
+
+    private initialized: boolean = false;
+    public takeAction(tile: ITile): void {
+        this.currentPhase.takeAction(tile);
+        if(this.currentPhase.finished())
+            this.nextPhase();
+    }
+
+    public finished(): boolean {
+        return this.phasePointer == this.phases.length;
     }
 }
