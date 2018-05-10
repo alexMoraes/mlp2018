@@ -30,7 +30,7 @@
 \usepackage{url}                    % para formatar URLs
 %\usepackage{color}				    % para imagens e outras coisas coloridas
 %\usepackage{fixltx2e}              % para subscript
-%\usepackage{amsmath}               % para \epsilon e matemática
+\usepackage{amsmath}               % para \epsilon e matemática
 %\usepackage{amsfonts}
 %\usepackage{setspace}			    % para mudar espaçamento dos parágrafos
 %\usepackage[table,xcdraw]{xcolor}  % para tabelas coloridas
@@ -67,6 +67,8 @@
 % Ative o seguinte caso alguma nota de rodapé fique muito longa e quebre entre múltiplas
 % páginas
 %\interfootnotelinepenalty=10000
+
+\numberwithin{figure}{chapter}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Informações gerais                                   
@@ -111,6 +113,8 @@
 
 \selectlanguage{brazilian}
 
+
+
 % Sumario
 \tableofcontents
 
@@ -154,13 +158,62 @@ O paradigma orientado a objetos visa um forte mapeamento entre objetos do mundo 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Capítulo 2
 %
-\chapter{Abordagem funcional}
+\chapter{Abordagem orientada a objetos}
 
+Blabla sobre orientacao a objetos
+
+\section{Classes}
+
+Blabla sobre classes
+
+\begin{figure}[h]
+%\lstinputlisting[firstline=37, lastline=45]{../src/classes/RiskEngine.ts}
+\lstinputlisting{../src/Interfaces/IRisk.ts}
+\caption{Typescript class}
+\label{fig:tsClass}
+\end{figure}
+
+
+\section{Encapsulamento}
+
+Blabla sobre encapsulamento
+
+\section{Construtores}
+
+Blabla sobre construtores
+
+\section{Destrutores}
+
+Blabla sobre destrutores
+
+\section{Namespaces}
+
+Blabla sobre namespaces
+
+\section{Herança}
+
+Blabla sobre herança
+
+\section{Polimorfismo por inclusão}
+
+Blabla sobre polimorfirmo por inclusão
+
+\section{Polimorfismo paramétrico}
+
+Blabla sobre polimorfirmo paramétrico
+
+\section{Polimorfismo por sobrecarga}
+
+Blabla sobre polimorfirmo por sobrecarga
+
+\section{Delegates}
+
+Blabla sobre delegates
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Capítulo 3
 %
-\chapter{Abordagem orientada a objetos}
+\chapter{Abordagem funcional}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,7 +221,9 @@ O paradigma orientado a objetos visa um forte mapeamento entre objetos do mundo 
 %
 \chapter{Conclusão}
 
+\section{Abordagem orientada a objetos}
 
+Descrever as facilidades e dificuldades encontradas, benefícios, problemas e limitações da linguagem estudada.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
