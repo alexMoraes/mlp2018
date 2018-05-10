@@ -63,6 +63,7 @@ function mouseClicked() {
     if (tileId > 0) {
         tileIndex = tileId - 1;
         risk.action(tileIndex);
+        console.clear();
         console.log(risk.getMessage());
         draw();
     }
