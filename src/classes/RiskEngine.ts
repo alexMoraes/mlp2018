@@ -1,6 +1,6 @@
 const X = 1000;
 const Y = 600;
-const TILES = 50;
+const TILES = 52;
 const PLAYERS = 2;
 const COLORS = [[255,0,0],
                 [0,0,255]];
@@ -11,7 +11,6 @@ class RiskEngine {
     matrix : number[][];
     tiles : ITile[];
     players : IPlayer[];
-    private currentTurn: ITakesAction;
     constructor() {
         this.matrix = [];
         this.tiles = [];
@@ -31,8 +30,6 @@ class RiskEngine {
             }
             this.players.unshift(new Player(i, COLORS[i-1], tilesToPlayer));
         }
-
-        this.currentTurn = TurnFactory.getTurns(this.players)[0];
 
         // Create matrix
         for(var i = 0; i < X; i++){
@@ -68,15 +65,31 @@ class RiskEngine {
             tile.calculateCenter();
             tile.calculateBorderers(this.matrix, this.tiles);
         });
+
+        this.phases = [
+            new SetupBoardPhase(this.players, this.tiles),
+            new TurnsPhase(this.players),
+            new EndPhase(this.players)
+        ]
+        this.phasePointer = 0;
+        this.currentPhase = this.phases[0];
     }
 
     getMessage() : String {
-        return this.currentTurn.getMessage();
+        return this.currentPhase.getMessage();
     }
 
+    private phases: Array<GamePhase>;
+    private phasePointer: number;
+    private currentPhase: GamePhase;
     action(tileNumber: number) {
-        //console.log(this.tiles[tileNumber].borderers);
-        this.currentTurn.takeAction(this.tiles[tileNumber]);
-        this.currentTurn = this.currentTurn.nextAction();
+        this.currentPhase.takeAction(this.tiles[tileNumber]);
+        if(this.currentPhase.finished())
+            this.nextPhase();
+    }
+
+    private nextPhase(): void {
+        this.phasePointer++;
+        this.currentPhase = this.phases[this.phasePointer];
     }
 }

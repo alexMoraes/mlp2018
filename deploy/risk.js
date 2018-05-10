@@ -1,4 +1,66 @@
 "use strict";
+class Die {
+    constructor() {
+        this.result = 0;
+    }
+    roll() {
+        this.result = Math.ceil(Math.random() * 6);
+    }
+    getResult() {
+        return this.result;
+    }
+}
+class Attack {
+    constructor(player) {
+        this.attackingTile = null;
+        this.defendingTile = null;
+        this.player = player;
+    }
+    setAttackingTile(tile) {
+        this.attackingTile = tile;
+    }
+    setDefendingTile(tile) {
+        this.defendingTile = tile;
+    }
+    resolve() {
+        if (this.attackingTile == null || this.defendingTile == null)
+            return;
+        var attackers = Math.min(this.attackingTile.armies - 1, 3);
+        var defenders = Math.min(this.defendingTile.armies, 2);
+        var attackingDice = [];
+        var defendingDice = [];
+        for (var i = 0; i < attackers; i++) {
+            var die = new Die();
+            die.roll();
+            attackingDice.push(die);
+        }
+        attackingDice = attackingDice.sort((x, y) => y.getResult() - x.getResult());
+        for (var i = 0; i < defenders; i++) {
+            var die = new Die();
+            die.roll();
+            defendingDice.push(die);
+        }
+        defendingDice = defendingDice.sort((x, y) => y.getResult() - x.getResult());
+        var takenDice = Math.min(defenders, attackers);
+        for (var i = 0; i < takenDice; i++) {
+            if (attackingDice[i].getResult() > defendingDice[i].getResult())
+                this.defendingTile.addArmy(-1);
+            else {
+                this.attackingTile.addArmy(-1);
+                attackers--;
+            }
+        }
+        if (this.defendingTile.armies == 0) {
+            this.defendingTile.owner = 0;
+            this.player.takeTile(this.defendingTile, attackers);
+            this.attackingTile.addArmy(-attackers);
+        }
+    }
+    reset() {
+        this.attackingTile = null;
+        this.defendingTile = null;
+    }
+}
 class Player {
     constructor(id, color, armies) {
         this.id = id;
@@ -12,7 +74,7 @@ class Player {
     }
     placeArmies(tile, armies) {
         if (tile) {
-            if (!tile.hasOwner()) {
+            if (!tile.hasOwner() || tile.owner != this.id) {
                 // must have an owner at this time of game
                 return false;
             }
@@ -40,12 +102,13 @@ class Player {
     clearSelectedTile() {
         this.selectedTile = null;
     }
-    takeTile(tile) {
+    takeTile(tile, armies) {
         if (tile) {
             if (!tile.hasOwner()) {
                 tile.setOwner(this.id);
-                tile.addArmy(1);
-                this.armies -= 1;
+                this.ownedTiles.push(tile);
+                tile.addArmy(armies);
+                this.armies -= armies;
                 return true;
             }
             else {
@@ -62,10 +125,17 @@ class Player {
     ownsTile(tile) {
         return tile.owner == this.id;
     }
+    totalTiles() {
+        this.ownedTiles = this.ownedTiles.filter(x => x.owner == this.id);
+        return this.ownedTiles.length;
+    }
+    attackOptions() {
+        return this.ownedTiles.filter(x => x.armies > 1 && x.borderers.filter(y => y.owner != this.id).length > 0);
+    }
 }
 const X = 1000;
 const Y = 600;
-const TILES = 50;
+const TILES = 52;
 const PLAYERS = 2;
 const COLORS = [[255, 0, 0],
     [0, 0, 255]];
@@ -89,7 +159,6 @@ class RiskEngine {
             }
             this.players.unshift(new Player(i, COLORS[i - 1], tilesToPlayer));
         }
-        this.currentTurn = TurnFactory.getTurns(this.players)[0];
         // Create matrix
         for (var i = 0; i < X; i++) {
             this.matrix[i] = new Array(Y).fill(0);
@@ -118,14 +187,25 @@ class RiskEngine {
             tile.calculateCenter();
             tile.calculateBorderers(this.matrix, this.tiles);
         });
+        this.phases = [
+            new SetupBoardPhase(this.players, this.tiles),
+            new TurnsPhase(this.players),
+            new EndPhase(this.players)
+        ];
+        this.phasePointer = 0;
+        this.currentPhase = this.phases[0];
     }
     getMessage() {
-        return this.currentTurn.getMessage();
+        return this.currentPhase.getMessage();
     }
     action(tileNumber) {
-        //console.log(this.tiles[tileNumber].borderers);
-        this.currentTurn.takeAction(this.tiles[tileNumber]);
-        this.currentTurn = this.currentTurn.nextAction();
+        this.currentPhase.takeAction(this.tiles[tileNumber]);
+        if (this.currentPhase.finished())
+            this.nextPhase();
+    }
+    nextPhase() {
+        this.phasePointer++;
+        this.currentPhase = this.phases[this.phasePointer];
     }
 }
 class Tile {
@@ -241,300 +321,214 @@ class Tile {
 }
 class Turn {
     constructor(player) {
-        this.nextTurn = null;
+        this.phasePointer = 0;
+        this.initialized = false;
         this.player = player;
-        this.currentPhase = new ChooseTilesPhase(player);
+        this.phases = [
+            new DeployPhase(player),
+            new AttackPhase(player)
+        ];
+        this.currentPhase = this.phases[0];
     }
-    takeAction(tile) {
-        return this.currentPhase.takeAction(tile);
-    }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        if (this.currentPhase.hasNext()) {
-            this.currentPhase = this.currentPhase.nextAction();
-            return this;
-        }
-        else {
-            var next = this.nextTurn;
-            this.currentPhase = this.currentPhase.nextAction();
-            return next;
-        }
-    }
-    setNextTurn(nextTurn) {
-        this.nextTurn = nextTurn;
+    nextPhase() {
+        this.phasePointer++;
+        this.currentPhase = this.phases[this.phasePointer];
+        this.initialized = false;
     }
     getMessage() {
+        if (!this.initialized) {
+            this.currentPhase.setup();
+            this.initialized = true;
+        }
         return this.currentPhase.getMessage();
     }
-}
-class TurnFactory {
-    static getTurns(players) {
-        var turns = new Array();
-        players.forEach(player => {
-            turns.push(new Turn(player));
-        });
-        for (var i = 0; i < turns.length; i++) {
-            turns[i].setNextTurn(turns[(i + 1) % turns.length]);
-        }
-        return turns;
+    takeAction(tile) {
+        this.currentPhase.takeAction(tile);
+        if (this.currentPhase.finished())
+            this.nextPhase();
+    }
+    finished() {
+        return this.phasePointer == this.phases.length;
     }
 }
-class Phase {
-    constructor(player, firstStep) {
+class GamePhase {
+    constructor(players) {
+        this.playerPointer = 0;
+        this.players = players;
+    }
+    nextPlayer() {
+        this.playerPointer = (this.playerPointer + 1) % this.players.length;
+    }
+}
+/// <reference path="GamePhase.ts"/>
+class EndPhase extends GamePhase {
+    getMessage() {
+        return "Game over";
+    }
+    takeAction(tile) {
+    }
+    finished() {
+        return false;
+    }
+}
+class SetupBoardPhase extends GamePhase {
+    constructor(players, tiles) {
+        super(players);
+        this.tilesTaken = 0;
+        this.players = players;
+        this.tiles = tiles;
+    }
+    finished() {
+        return this.tilesTaken == this.tiles.length;
+    }
+    takeAction(tile) {
+        var success = this.players[this.playerPointer].takeTile(tile, 1);
+        if (success) {
+            this.tilesTaken++;
+            this.nextPlayer();
+        }
+    }
+    getMessage() {
+        return "Jogador " + this.players[this.playerPointer].id + ": escolha um territorio para dominar";
+    }
+}
+class TurnsPhase extends GamePhase {
+    constructor(players) {
+        super(players);
+        this.players = players;
+        this.currentTurn = new Turn(players[0]);
+    }
+    nextTurn() {
+        this.nextPlayer();
+        this.currentTurn = new Turn(this.players[this.playerPointer]);
+    }
+    finished() {
+        return this.players.filter(x => x.totalTiles() > 0).length == 1;
+    }
+    takeAction(tile) {
+        this.currentTurn.takeAction(tile);
+        if (this.currentTurn.finished())
+            this.nextTurn();
+    }
+    getMessage() {
+        return this.currentTurn.getMessage();
+    }
+}
+class SelectAttackerStep {
+    constructor(player, attack) {
+        this.success = false;
         this.player = player;
-        this.currentStep = firstStep;
-    }
-    getCurrentStep() {
-        return this.currentStep;
-    }
-    getPlayer() {
-        return this.player;
+        this.attack = attack;
     }
     getMessage() {
-        return this.getCurrentStep().getMessage();
-    }
-}
-/// <reference path="Phase.ts"/>
-class AttackPhase extends Phase {
-    constructor(player) {
-        super(player, new ReinforceArmyStep(player));
+        return "Jogador " + this.player.id + ": escolha um de seus territorios para atacar.";
     }
     takeAction(tile) {
-        return this.getCurrentStep().takeAction(tile);
-    }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        if (this.getCurrentStep().hasNext()) {
-            return this.getCurrentStep().nextAction();
-        }
+        if (!tile.isAbleToAttack())
+            this.success = false;
         else {
-            return new PlaceArmiesPhase(this.getPlayer());
+            this.success = this.player.selectTile(tile);
+            this.attack.setAttackingTile(tile);
         }
     }
-}
-class ChooseTilesPhase extends Phase {
-    constructor(player) {
-        super(player, new PlaceArmyToEmptyTileStep(player));
-        this._validAction = true;
-    }
-    takeAction(tile) {
-        this._validAction = this.getCurrentStep().takeAction(tile);
-        return this._validAction;
-    }
-    hasNext() {
-        return !this._validAction;
-    }
-    nextAction() {
-        if (this.getPlayer().armiesToPlace() > 0)
-            return this;
-        else
-            return new PlaceArmiesPhase(this.getPlayer());
+    finished() {
+        return this.success;
     }
 }
-class PlaceArmiesPhase extends Phase {
-    constructor(player) {
-        super(player, new PlaceArmyToOwnerTileStep(player));
-        this._validAction = true;
-        player.giveArmies(5);
-    }
-    takeAction(tile) {
-        this._validAction = this.getCurrentStep().takeAction(tile);
-        return this._validAction;
-    }
-    hasNext() {
-        return !this._validAction;
-    }
-    nextAction() {
-        if (this.getPlayer().armiesToPlace() > 0)
-            return this;
-        else
-            return new AttackPhase(this.getPlayer());
-    }
-}
-class Step {
-    constructor(player) {
+class SelectDefenderStep {
+    constructor(player, attack) {
+        this.success = false;
         this.player = player;
-    }
-    getPlayer() {
-        return this.player;
-    }
-}
-/// <reference path="Step.ts"/>
-class PlaceArmyToEmptyTileStep extends Step {
-    takeAction(tile) {
-        return this.getPlayer().takeTile(tile);
-    }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        return this;
+        this.attack = attack;
     }
     getMessage() {
-        return "Jogador " + this.getPlayer().id + ": escolha um territorio para dominar";
-    }
-}
-/// <reference path="Step.ts"/>
-class PlaceArmyToOwnerTileStep extends Step {
-    takeAction(tile) {
-        return this.getPlayer().placeArmies(tile, 1);
-    }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        return this;
-    }
-    getMessage() {
-        var player = this.getPlayer();
-        return "Jogador " + player.id + ": escolha um territorio para reforcar. Voce possui " + player.armiesToPlace() + " exercitos restantes";
-    }
-}
-/// <reference path="Step.ts"/>
-class ReinforceArmyStep extends Step {
-    constructor(player) {
-        super(player);
-        this.getPlayer().giveArmies(5);
+        return "Jogador " + this.player.id + ": escolha um territorio inimigo para atacar.";
     }
     takeAction(tile) {
-        var player = this.getPlayer();
-        if (tile.owner == player.id) {
-            return player.placeArmies(tile, 1);
+        if (tile.owner == this.player.id) {
+            this.player.selectTile(tile);
+            this.success = false;
         }
         else {
-            return false;
-        }
-    }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        if (this.getPlayer().armiesToPlace() == 0)
-            return new SelectOwnerTileToAttackStep(this.getPlayer());
-        else
-            return this;
-    }
-    getMessage() {
-        var player = this.getPlayer();
-        return "Jogador " + player.id + ": posicione exercitos em seus territorios. " + player.armiesToPlace() + " exercitos restantes";
-    }
-}
-/// <reference path="Step.ts"/>
-class SelectEnemyTileToAttackStep extends Step {
-    constructor() {
-        super(...arguments);
-        this._validAction = true;
-    }
-    takeAction(tile) {
-        if (tile.owner == this.getPlayer().id) {
-            this.getPlayer().selectTile(tile);
-            this._validAction = false;
-        }
-        else {
-            var ownerTile = this.getPlayer().getSelectedTile();
+            var ownerTile = this.player.getSelectedTile();
             if (ownerTile != null) {
-                if (ownerTile.isAbleToAttack()) {
-                    var ownerTileId = ownerTile.id;
-                    if (tile.borderers.some(b => b.id == ownerTileId) && tile.owner != this.getPlayer().id) {
-                        var armiesAttacking = ownerTile.armies;
-                        var armiesDefending = tile.armies;
-                        var attackRandom = Math.floor(Math.random() * armiesAttacking + 1);
-                        var defenseRandom = Math.floor(Math.random() * armiesDefending + 1);
-                        var diff = Math.abs(attackRandom - defenseRandom);
-                        console.log("Ataque tirou " + attackRandom);
-                        console.log("Defesa tirou " + defenseRandom);
-                        if (attackRandom > defenseRandom) { // Attack wins
-                            tile.setOwner(this.getPlayer().id);
-                            tile.setArmy(diff);
-                            console.log("Ataque venceu!");
-                            ownerTile.setArmy(1);
-                        }
-                        else if (attackRandom == defenseRandom) { // Tie
-                            tile.setArmy(1);
-                            ownerTile.setArmy(1);
-                            console.log("Empate!");
-                        }
-                        else { // Defense wins
-                            ownerTile.setArmy(1);
-                            tile.setArmy(diff);
-                            console.log("Defesa venceu!");
-                        }
-                        this.getPlayer().clearSelectedTile();
-                        this._validAction = true;
-                    }
-                    else {
-                        this._validAction = false;
-                    }
+                var ownerTileId = ownerTile.id;
+                if (tile.borderers.some(b => b.id == ownerTileId) && tile.owner != this.player.id) {
+                    this.attack.setDefendingTile(tile);
+                    this.success = true;
                 }
                 else {
-                    this._validAction = false;
+                    this.success = false;
                 }
             }
             else {
-                this._validAction = false;
+                this.success = false;
             }
         }
-        return this._validAction;
     }
-    hasNext() {
-        return !this._validAction;
-    }
-    nextAction() {
-        if (this._validAction)
-            return new ReinforceArmyStep(this.getPlayer());
-        else
-            return this;
-    }
-    getMessage() {
-        var player = this.getPlayer();
-        return "Jogador " + player.id + ": escolha um territorio inimigo para atacar.";
+    finished() {
+        return this.success;
     }
 }
-/// <reference path="Step.ts"/>
-class SelectOwnerTileToAttackStep extends Step {
-    constructor() {
-        super(...arguments);
-        this._validAction = true;
-    }
-    takeAction(tile) {
-        if (this.getPlayer().selectTile(tile)) {
-            this._validAction = tile.isAbleToAttack();
-        }
-        else {
-            this._validAction = false;
-        }
-        return this._validAction;
-    }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        if (this._validAction)
-            return new SelectEnemyTileToAttackStep(this.getPlayer());
-        else
-            return this;
-    }
-    getMessage() {
-        var player = this.getPlayer();
-        return "Jogador " + player.id + ": escolha um de seus territorios para atacar.";
+// abstract class Step implements ITakesAction {
+//     public abstract getMessage(): string;
+//     public abstract takeAction(tile: ITile): void;
+// }
+class TurnPhase {
+    constructor(player) {
+        this.player = player;
     }
 }
-/// <reference path="Step.ts"/>
-class SelectTileStep extends Step {
-    takeAction(tile) {
-        return this.getPlayer().selectTile(tile);
+/// <reference path="TurnPhase.ts"/>
+class AttackPhase extends TurnPhase {
+    constructor(player) {
+        super(player);
+        this.stepPointer = 0;
+        this.attack = new Attack(player);
+        this.steps = [
+            new SelectAttackerStep(player, this.attack),
+            new SelectDefenderStep(player, this.attack)
+        ];
+        this.currentStep = this.steps[0];
     }
-    hasNext() {
-        return true;
-    }
-    nextAction() {
-        return this;
+    nextSetp() {
+        this.stepPointer = (this.stepPointer + 1) % this.steps.length;
+        this.currentStep = this.steps[this.stepPointer];
     }
     getMessage() {
-        return "N sei o q isso faz";
+        return this.currentStep.getMessage();
+    }
+    setup() {
+    }
+    takeAction(tile) {
+        this.currentStep.takeAction(tile);
+        if (this.currentStep.finished()) {
+            this.nextSetp();
+            if (this.stepPointer == 0) {
+                this.attack.resolve();
+                this.attack.reset();
+                this.player.clearSelectedTile();
+            }
+        }
+    }
+    finished() {
+        return this.player.attackOptions().length == 0;
+    }
+}
+/// <reference path="TurnPhase.ts"/>
+class DeployPhase extends TurnPhase {
+    getMessage() {
+        return "Jogador " + this.player.id + ": escolha um territorio para reforcar. Voce possui " + this.player.armiesToPlace() + " exercitos restantes";
+    }
+    setup() {
+        var armiesToDeploy = Math.floor(this.player.totalTiles() / 3);
+        armiesToDeploy = Math.max(armiesToDeploy, 3);
+        this.player.giveArmies(armiesToDeploy - this.player.armiesToPlace());
+    }
+    takeAction(tile) {
+        this.player.placeArmies(tile, 1);
+    }
+    finished() {
+        return this.player.armiesToPlace() <= 0;
     }
 }
