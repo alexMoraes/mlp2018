@@ -12,13 +12,12 @@
 \contentsline {section}{\numberline {4.2}Encapsulamento}{9}{section.4.2}
 \contentsline {section}{\numberline {4.3}Construtores}{9}{section.4.3}
 \contentsline {section}{\numberline {4.4}Destrutores}{9}{section.4.4}
-\contentsline {section}{\numberline {4.5}Namespaces}{9}{section.4.5}
-\contentsline {section}{\numberline {4.6}Heran\IeC {\c c}a}{9}{section.4.6}
-\contentsline {section}{\numberline {4.7}Polimorfismo por inclus\IeC {\~a}o}{9}{section.4.7}
-\contentsline {section}{\numberline {4.8}Polimorfismo param\IeC {\'e}trico}{9}{section.4.8}
-\contentsline {section}{\numberline {4.9}Polimorfismo por sobrecarga}{10}{section.4.9}
-\contentsline {section}{\numberline {4.10}Delegates}{10}{section.4.10}
+\contentsline {section}{\numberline {4.5}Polimorfismo por inclus\IeC {\~a}o}{10}{section.4.5}
+\contentsline {section}{\numberline {4.6}Polimorfismo param\IeC {\'e}trico}{10}{section.4.6}
+\contentsline {section}{\numberline {4.7}Polimorfismo por sobrecarga}{10}{section.4.7}
+\contentsline {section}{\numberline {4.8}Delegates}{10}{section.4.8}
 \contentsline {chapter}{5~Abordagem funcional}{11}{CHAPTER.5}
 \contentsline {chapter}{6~Conclus\IeC {\~a}o}{12}{CHAPTER.6}
 \contentsline {section}{\numberline {6.1}Abordagem orientada a objetos}{12}{section.6.1}
+\contentsline {chapter}{\xspace {}Refer{\^e}ncias}{13}{schapter.2}
 \contentsfinish 

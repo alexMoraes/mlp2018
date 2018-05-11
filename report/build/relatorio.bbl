@@ -1,0 +1,33 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.1 }
+
+\bibitem[Hasbro 1993]{riskMan}
+\abntrefinfo{Hasbro}{HASBRO}{1993}
+{HASBRO. 1993.
+Available from Internet:
+  \url{https://www.hasbro.com/common/instruct/risk.pdf}.}
+
+\bibitem[MDN 2018]{memMng}
+\abntrefinfo{MDN}{MDN}{2018}
+{MDN. 2018.
+Acessado em 10/05/2018.
+Available from Internet:
+  \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory\_Management}.}
+
+\bibitem[Microsoft 2018]{vsCode}
+\abntrefinfo{Microsoft}{MICROSOFT}{2018}
+{MICROSOFT. 2018.
+Acessado em 10/05/2018.
+Available from Internet: \url{https://github.com/Microsoft/vscode}.}
+
+\bibitem[Typescript 2018]{typescript}
+\abntrefinfo{Typescript}{TYPESCRIPT}{2018}
+{TYPESCRIPT. 2018.
+Acessado em 10/05/2018.
+Available from Internet: \url{https://www.typescriptlang.org/}.}
+
+\end{thebibliography}
