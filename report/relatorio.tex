@@ -170,7 +170,7 @@ A linguagem definida para o desenvolvimento do trabalho foi Typescript, uma ling
 
 \section{Classes}
 
-As classes são a base da orientação a objetos. A figura 2.1 representa o diagrama de classes UML modelado para este projeto e utilizado como base para implementação do mesmo.
+As classes são a base da orientação a objetos. A figura 3.1 representa o diagrama de classes UML modelado para este projeto e utilizado como base para implementação do mesmo.
 \begin{figure}[ht]
 \centering {
 \includegraphics[width=130mm, scale=0.6]{uml/ClassDiagram.pdf}
@@ -188,8 +188,19 @@ O encapsulamento envolve a abstração dos métodos e atributos de determinada c
 
 \section{Construtores}
 
-Blabla sobre construtores
+Os construtores são métodos chamados ao instanciar um objeto, podendo ser herdados de uma classe abstrata à qual a classe em questão herda ou ser definidos na própria classe. Como o conceito de herança foi amplamente utilizado neste projeto, grande parte dos objetos herda o construtor de sua superclasse, mas em alguns casos extendemos o construtor herdado para atingir alguma funcionalidade a mais implementada pela classe filha, como pode ser observado na classe \textit{SetupBoardPhase}, mostrado na Figura 3.2.
 
+\begin{figure}[ht]
+\centering {
+	\lstinputlisting[firstline=4, lastline=8]{../src/classes/gamePhases/SetupBoardPhase.ts}
+}
+%\lstinputlisting[firstline=37, lastline=45]{../src/classes/RiskEngine.ts}
+%\lstinputlisting{../src/Interfaces/IRisk.ts}
+\caption{\textit{SetupBoardPhase} class constructor}
+\label{fig:tsClass}
+\end{figure}
+
+ 
 \section{Destrutores}
 
 Em typescript temos o conceito de \textit{garbage collection}, um processo automático que desaloca objetos que não são mais referenciados no programa. Com esta tecnologia, o programador não precisa se preocupar com o gerenciamento de memória e evita problemas como o \textit{memory leak}. Tendo este recurso disponível, destrutores se tornam desnecessários na linguagem. Porém, esta funcionalidade da linguagem também possui desvantagens, tal como o maior uso de recursos computacionais para definir que objetos podem ser desalocados, visto que em linguagens que não possuem garbage collection, o programador que gerencia a desalocação de memória, resultando em menor uso destes recursos.
@@ -204,7 +215,18 @@ Blabla sobre herança
 
 \section{Polimorfismo por inclusão}
 
-Blabla sobre polimorfirmo por inclusão
+O polimorfismo por inclusão é aquele em que um objeto pode pertencer a várias classes, tendo um comportamento modificado em relação ao comportamento original. 
+Neste trecho de código, o polimorfismo por inclusão ocorre pois a propriedade \textit{this.phases} é um Array de \textit{TurnPhase} e este Array foi inicializado no construtor com dois elementos, o primeiro sendo o DeployPhase e o segundo o AttackPhase. Estas são classes que modificam comportamentos da classe \textit{TurnPhase} e serão tratados como \textit{TurnPhase} a partir de então. Posteriormente, por exemplo, o método \textit{takeAction()} será chamado para cada elemento do Array de \textit{TurnPhase}, sendo executado a implementação da classe herdada - \textit{DeployPhase} ou \textit{AttackPhase}.
+
+\begin{figure}[ht]
+\centering {
+	\lstinputlisting[firstline=8, lastline=11]{../src/classes/Turn.ts}
+}
+%\lstinputlisting[firstline=37, lastline=45]{../src/classes/RiskEngine.ts}
+%\lstinputlisting{../src/Interfaces/IRisk.ts}
+\caption{Trecho do construtor da classe \textit{Turn}}
+\label{fig:tsClass}
+\end{figure}
 
 \section{Polimorfismo paramétrico}
 
