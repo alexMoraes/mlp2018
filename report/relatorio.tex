@@ -39,8 +39,11 @@
 %\usepackage{booktabs}
 %\usepackage{tabularx}
 %\usepackage[breaklinks]{hyperref}
+\usepackage{pdfpages}
 
 \usepackage[alf,abnt-emphasize=bf]{abntex2cite}	% pacote para usar citações abnt
+
+\graphicspath{ {images/} }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Macros, ajustes e definições
@@ -154,21 +157,26 @@ O paradigma funcional é uma maneira distinta da qual estamos acostumados de se 
 O paradigma orientado a objetos visa um forte mapeamento entre objetos do mundo real e objetos do programa, geralmente representados por classes. A orientação a objetos possui como base os conceitos de abstração de dados, encapsulamento, herança e polimorfismo, tornando o código gerado muito mais legível e de fácil reuso. Todas essas características têm como objetivo aproximar o software desenvolvido do mundo real, tornando o sistema extremamente modular e de fácil interpretação quando feito corretamente.
 
 
+\chapter{Visão geral da linguagem}
+
+A linguagem definida para o desenvolvimento do trabalho foi Typescript, uma linguagem de código aberto desenvolvida pela Microsoft, que propõe orientação a objetos e compila em Javascript nativo. Por Javascript ser altamente portável - todos navegadores são capazes de executar javascript - Typescript acabou se tornando uma ótima opção para orientação a objetos em aplicações que necessitam rodar em navegadores. A principal adição do Typescript em relação ao Javascript notoriamente é a noção de orientação a objetos, permitindo a criação de classes, tipos estáticos, interfaces, entre outros - mais detalhes sobre estas e outras funcionalidades de orientação a objetos serão abordadas durante este trabalho. Typescript veio para substituir o Javascript nativo em projetos grandes, tornando as suas manutenções uma tarefa fácil, devido às grandes e já conhecidas vantagens de manutenção em códigos orientados a objetos, que são: abstração, encapsulamento, herança e polimorfismo. Mesmo Typescript sendo uma linguagem relativamente nova - lançado em fevereiro de 2017 -, o seu uso em aplicações comercias vem crescendo consideravelmente, graças à compatibilidade com Javascript, o que propõe migrações parciais de código para a nova linguagem. Uma das aplicações que possui implementações em Typescript é o VSCode, que é uma IDE altamente usada na indústria e foi inclusive a IDE escolhida para realizarmos a implementação deste trabalho.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Capítulo 2
+% Capítulo 3
 %
 \chapter{Abordagem orientada a objetos}
 
-Blabla sobre orientacao a objetos
-
 \section{Classes}
 
-Blabla sobre classes
-
-\begin{figure}[h]
+As classes são a base da orientação a objetos. A figura 2.1 representa o diagrama de classes UML modelado para este projeto e utilizado como base para implementação do mesmo.
+\begin{figure}[ht]
+\centering {
+\includegraphics[width=130mm, scale=0.6]{uml/ClassDiagram.pdf}
+}
 %\lstinputlisting[firstline=37, lastline=45]{../src/classes/RiskEngine.ts}
-\lstinputlisting{../src/Interfaces/IRisk.ts}
+%\lstinputlisting{../src/Interfaces/IRisk.ts}
 \caption{Typescript class}
 \label{fig:tsClass}
 \end{figure}
@@ -176,7 +184,7 @@ Blabla sobre classes
 
 \section{Encapsulamento}
 
-Blabla sobre encapsulamento
+O encapsulamento envolve a abstração dos métodos e atributos de determinada classe, tornando o software mais flexível à mudanças, já que cada funcionalidade deve ser implementada isolada das demais. Nesta implementação, 
 
 \section{Construtores}
 
