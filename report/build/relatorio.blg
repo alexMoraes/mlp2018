@@ -17,10 +17,10 @@ Warning--entry type for "riskMan" isn't style-file defined
 --line 5 of file biblio.bib
 Warning--entry type for "memMng" isn't style-file defined
 --line 15 of file biblio.bib
-Warning--entry type for "vsCode" isn't style-file defined
---line 25 of file biblio.bib
-Warning--entry type for "typescript" isn't style-file defined
+Warning--entry type for "tsFunctions" isn't style-file defined
 --line 35 of file biblio.bib
+Warning--entry type for "typescript" isn't style-file defined
+--line 45 of file biblio.bib
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=20001) to 20 items from 10.
@@ -32,25 +32,25 @@ Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 +---------------------------------------------------------+
 You've used 6 entries,
             6711 wiz_defined-function locations,
-            1216 strings with 9624 characters,
-and the built_in function-call counts, 7065 in all, are:
-= -- 947
+            1215 strings with 9649 characters,
+and the built_in function-call counts, 7521 in all, are:
+= -- 1019
 > -- 60
-< -- 190
-+ -- 257
+< -- 214
++ -- 282
 - -- 20
-* -- 362
-:= -- 925
+* -- 386
+:= -- 973
 add.period$ -- 15
 call.type$ -- 6
 change.case$ -- 33
-chr.to.int$ -- 5
+chr.to.int$ -- 4
 cite$ -- 4
-duplicate$ -- 677
+duplicate$ -- 749
 empty$ -- 306
 format.name$ -- 92
-if$ -- 1412
-int.to.chr$ -- 1
+if$ -- 1484
+int.to.chr$ -- 2
 int.to.str$ -- 0
 missing$ -- 87
 newline$ -- 31
@@ -59,10 +59,10 @@ pop$ -- 134
 preamble$ -- 1
 purify$ -- 18
 quote$ -- 0
-skip$ -- 818
+skip$ -- 889
 stack$ -- 1
-substring$ -- 322
-swap$ -- 224
+substring$ -- 346
+swap$ -- 248
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
