@@ -7,6 +7,48 @@ const COLORS = [[255,0,0],
 
 type Nullable<T> = T | null;
 
+// type FAction = (tileId: number) => GameStatus;
+// type GameStatus = { Players: FPlayer[], Tiles: FTile[], NextAction: FAction };
+// type FPlayer = { Id : number, Code: number, Color: number[]};
+// type FTile = { Id: number };
+
+// let InitGame = function(players: number, tiles: number) : GameStatus {
+//     console.log("Initializing game with " + players + " players and " + tiles + " tiles")
+//     return {
+//         Players: createPlayers(numberOfPlayers),
+//         Tiles: [],
+//         NextAction: function(tileId: number) { return InitGame(players, tiles) }
+//     }
+// }
+
+// let playerColors = [[255,0,0], [0,0,255]];
+
+// let createPlayer = function(id: number) : FPlayer {
+//     return { Id: id, Code: id + 1, Color: playerColors[id] };
+// }
+
+// let createPlayers = function(n: number) : FPlayer[] {
+//     if(n == 0) return [ createPlayer(0) ];
+//     return createPlayers(n - 1).concat([ createPlayer(n) ]);
+// }
+
+// let numberOfPlayers = 2;
+// let players = createPlayers(numberOfPlayers);
+
+// let define = function<T>(a: T | null | undefined) : T {
+//     if(a === undefined || a === null) throw new TypeError("Could not define");
+//     return a;
+// }
+
+// // Closure sobre players e define()
+// let getTurnPlayer = function(turn: number): FPlayer {
+//     let p = players.find(player => player.Id == turn % 2);
+//     return define(p);
+// }
+
+
+
+
 class RiskEngine {
     matrix : number[][];
     tiles : ITile[];

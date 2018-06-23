@@ -139,6 +139,37 @@ const TILES = 52;
 const PLAYERS = 2;
 const COLORS = [[255, 0, 0],
     [0, 0, 255]];
+// type FAction = (tileId: number) => GameStatus;
+// type GameStatus = { Players: FPlayer[], Tiles: FTile[], NextAction: FAction };
+// type FPlayer = { Id : number, Code: number, Color: number[]};
+// type FTile = { Id: number };
+// let InitGame = function(players: number, tiles: number) : GameStatus {
+//     console.log("Initializing game with " + players + " players and " + tiles + " tiles")
+//     return {
+//         Players: createPlayers(numberOfPlayers),
+//         Tiles: [],
+//         NextAction: function(tileId: number) { return InitGame(players, tiles) }
+//     }
+// }
+// let playerColors = [[255,0,0], [0,0,255]];
+// let createPlayer = function(id: number) : FPlayer {
+//     return { Id: id, Code: id + 1, Color: playerColors[id] };
+// }
+// let createPlayers = function(n: number) : FPlayer[] {
+//     if(n == 0) return [ createPlayer(0) ];
+//     return createPlayers(n - 1).concat([ createPlayer(n) ]);
+// }
+// let numberOfPlayers = 2;
+// let players = createPlayers(numberOfPlayers);
+// let define = function<T>(a: T | null | undefined) : T {
+//     if(a === undefined || a === null) throw new TypeError("Could not define");
+//     return a;
+// }
+// // Closure sobre players e define()
+// let getTurnPlayer = function(turn: number): FPlayer {
+//     let p = players.find(player => player.Id == turn % 2);
+//     return define(p);
+// }
 class RiskEngine {
     constructor() {
         this.matrix = [];
@@ -532,3 +563,40 @@ class DeployPhase extends TurnPhase {
         return this.player.armiesToPlace() <= 0;
     }
 }
+var Functional;
+(function (Functional) {
+    Functional.InitGame = function (players, tiles) {
+        return {
+            Players: createPlayers(players),
+            Tiles: createTiles(tiles),
+            NextAction: function (tileId) { return Functional.InitGame(players, tiles); }
+        };
+    };
+    let playerColors = [[255, 0, 0], [0, 0, 255]];
+    let createPlayer = function (id) {
+        return { Id: id, Code: id + 1, Color: playerColors[id] };
+    };
+    let createTile = function (id) {
+        return { Id: id };
+    };
+    let arrayCreator = function (createElement) {
+        let rec = function (n) {
+            if (n == 0)
+                return [];
+            return rec(n - 1).concat([createElement(n)]);
+        };
+        return rec;
+    };
+    let createPlayers = arrayCreator(createPlayer);
+    let createTiles = arrayCreator(createTile);
+    let define = function (a) {
+        if (a === undefined || a === null)
+            throw new TypeError("Could not define");
+        return a;
+    };
+    // // Closure sobre players e define()
+    // let getTurnPlayer = function(turn: number): Player {
+    //     let p = players.find(player => player.Id == turn % 2);
+    //     return define(p);
+    // }
+})(Functional || (Functional = {}));
