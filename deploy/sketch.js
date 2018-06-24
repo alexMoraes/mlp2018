@@ -61,6 +61,7 @@ function draw() {
 }
 
 function mouseClicked() {
+    gameStatus.NextAction(1);
     // var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
     // if (tileId > 0) {
     //     tileIndex = tileId - 1;

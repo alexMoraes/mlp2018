@@ -565,13 +565,6 @@ class DeployPhase extends TurnPhase {
 }
 var Functional;
 (function (Functional) {
-    Functional.InitGame = function (players, tiles) {
-        return {
-            Players: createPlayers(players),
-            Tiles: createTiles(tiles),
-            NextAction: function (tileId) { return Functional.InitGame(players, tiles); }
-        };
-    };
     let playerColors = [[255, 0, 0], [0, 0, 255]];
     let createPlayer = function (id) {
         return { Id: id, Code: id + 1, Color: playerColors[id] };
@@ -587,8 +580,8 @@ var Functional;
         };
         return rec;
     };
-    let createPlayers = arrayCreator(createPlayer);
-    let createTiles = arrayCreator(createTile);
+    Functional.createPlayers = arrayCreator(createPlayer);
+    Functional.createTiles = arrayCreator(createTile);
     let define = function (a) {
         if (a === undefined || a === null)
             throw new TypeError("Could not define");
@@ -599,4 +592,15 @@ var Functional;
     //     let p = players.find(player => player.Id == turn % 2);
     //     return define(p);
     // }
+})(Functional || (Functional = {}));
+/// <reference path="Common.ts"/>
+var Functional;
+(function (Functional) {
+    Functional.InitGame = function (players, tiles) {
+        return {
+            Players: Functional.createPlayers(players),
+            Tiles: Functional.createTiles(tiles),
+            NextAction: function (tileId) { console.log("Click"); return Functional.InitGame(players, tiles); }
+        };
+    };
 })(Functional || (Functional = {}));
