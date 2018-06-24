@@ -8,7 +8,7 @@ namespace Functional{
         return rec;
     }
 
-    let define = function<T>(a: T | null | undefined) : T {
+    export var define = function<T>(a: T | null | undefined) : T {
         if(a === undefined || a === null) throw new TypeError("Could not define");
         return a;
     }
