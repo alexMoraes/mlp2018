@@ -565,14 +565,7 @@ class DeployPhase extends TurnPhase {
 }
 var Functional;
 (function (Functional) {
-    let playerColors = [[255, 0, 0], [0, 0, 255]];
-    let createPlayer = function (id) {
-        return { Id: id, Code: id + 1, Color: playerColors[id] };
-    };
-    let createTile = function (id) {
-        return { Id: id };
-    };
-    let arrayCreator = function (createElement) {
+    Functional.arrayCreator = function (createElement) {
         let rec = function (n) {
             if (n == 0)
                 return [];
@@ -580,9 +573,7 @@ var Functional;
         };
         return rec;
     };
-    Functional.createPlayers = arrayCreator(createPlayer);
-    Functional.createTiles = arrayCreator(createTile);
-    let define = function (a) {
+    Functional.define = function (a) {
         if (a === undefined || a === null)
             throw new TypeError("Could not define");
         return a;
@@ -597,10 +588,63 @@ var Functional;
 var Functional;
 (function (Functional) {
     Functional.InitGame = function (players, tiles) {
+        let pl = Functional.createPlayers(players);
+        let incompleteStatus = {
+            Players: pl,
+            ActivePlayerId: 0,
+            Tiles: Functional.createTiles(tiles)
+        };
         return {
-            Players: Functional.createPlayers(players),
-            Tiles: Functional.createTiles(tiles),
-            NextAction: function (tileId) { console.log("Click"); return Functional.InitGame(players, tiles); }
+            Players: incompleteStatus.Players,
+            ActivePlayerId: incompleteStatus.ActivePlayerId,
+            Tiles: incompleteStatus.Tiles,
+            NextAction: claimTile(incompleteStatus)
         };
     };
+    let claimTile = function (status) {
+        return function (tileId) {
+            let tiles = status.Tiles;
+            let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
+            let tile = tiles[tileIndex];
+            if (Functional.isFree(tile)) {
+                tiles[tileIndex] = tile.Claim(status.Players[0]);
+                status.ActivePlayerId = (status.ActivePlayerId + 1) % status.Players.length;
+            }
+            return {
+                Players: status.Players,
+                ActivePlayerId: status.ActivePlayerId,
+                Tiles: tiles,
+                NextAction: claimTile(status)
+            };
+        };
+    };
+})(Functional || (Functional = {}));
+/// <reference path="Common.ts"/>
+var Functional;
+(function (Functional) {
+    let playerColors = [[255, 0, 0], [0, 0, 255]];
+    let createPlayer = function (id) {
+        return { Id: id, Code: id + 1, Color: playerColors[id] };
+    };
+    Functional.createPlayers = Functional.arrayCreator(createPlayer);
+})(Functional || (Functional = {}));
+/// <reference path="Common.ts"/>
+var Functional;
+(function (Functional) {
+    Functional.isFree = function (tile) {
+        return tile.Claim !== undefined;
+    };
+    let createTile = function (id) {
+        return {
+            Id: id,
+            Claim: function (player) {
+                return {
+                    Id: id,
+                    Owner: player,
+                    Armies: 1
+                };
+            }
+        };
+    };
+    Functional.createTiles = Functional.arrayCreator(createTile);
 })(Functional || (Functional = {}));
