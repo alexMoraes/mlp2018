@@ -17,18 +17,18 @@ namespace Functional {
             Players: incompleteStatus.Players,
             ActivePlayerId: incompleteStatus.ActivePlayerId,
             Tiles: incompleteStatus.Tiles,
-            NextAction: claimTile(incompleteStatus)
+            NextAction: tryClaimTile(incompleteStatus)
         }
     }
 
-    let claimTile = function(status: IncompleteStatus): Action {
+    let tryClaimTile = function(status: IncompleteStatus): Action {
         return function(tileId: number): GameStatus {
             let tiles = status.Tiles;
             let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
             let tile = tiles[tileIndex];
             
-            if(isFree(tile)) {
-                tiles[tileIndex] = tile.Claim(status.Players[0]);
+            if(!isOwned(tile)) {
+                tiles[tileIndex] = claimTile(tile, status.Players[status.ActivePlayerId]);
                 status.ActivePlayerId = (status.ActivePlayerId + 1) % status.Players.length;
             }
             
@@ -36,7 +36,7 @@ namespace Functional {
                 Players: status.Players,
                 ActivePlayerId: status.ActivePlayerId,
                 Tiles: tiles,
-                NextAction: claimTile(status)
+                NextAction: tryClaimTile(status)
             }
         }
     }

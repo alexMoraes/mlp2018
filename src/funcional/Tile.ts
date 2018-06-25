@@ -2,25 +2,27 @@
 
 namespace Functional {
     export type Tile = FreeTile | OwnedTile;
-    export type FreeTile = { Id: number, Claim: (player: Player) => OwnedTile };
+    export type FreeTile = { Id: number };
     export type OwnedTile = { Id: number, Owner: Player, Armies: number }
 
-    export var isFree = function(tile: Tile): tile is FreeTile {
-        return (<FreeTile>tile).Claim !== undefined;
+    export var isOwned = function(tile: Tile): tile is OwnedTile {
+        return (<OwnedTile>tile).Owner !== undefined;
     }
 
     let createTile = function(id: number): FreeTile {
         return {
-            Id:id,
-            Claim: function(player: Player): OwnedTile {
-                return {
-                    Id: id,
-                    Owner: player,
-                    Armies: 1
-                }
-            }
+            Id: id
         };
     }
 
     export var  createTiles = arrayCreator(createTile)
+
+    export var claimTile = function(tile: FreeTile, player: Player): OwnedTile {
+        console.log("Player " + player.Id + " claiming tile " + tile.Id);
+        return {
+            Id: tile.Id,
+            Owner: player,
+            Armies: 1
+        }
+    }
 }

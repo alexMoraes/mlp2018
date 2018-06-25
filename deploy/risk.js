@@ -598,23 +598,23 @@ var Functional;
             Players: incompleteStatus.Players,
             ActivePlayerId: incompleteStatus.ActivePlayerId,
             Tiles: incompleteStatus.Tiles,
-            NextAction: claimTile(incompleteStatus)
+            NextAction: tryClaimTile(incompleteStatus)
         };
     };
-    let claimTile = function (status) {
+    let tryClaimTile = function (status) {
         return function (tileId) {
             let tiles = status.Tiles;
             let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
             let tile = tiles[tileIndex];
-            if (Functional.isFree(tile)) {
-                tiles[tileIndex] = tile.Claim(status.Players[0]);
+            if (!Functional.isOwned(tile)) {
+                tiles[tileIndex] = Functional.claimTile(tile, status.Players[status.ActivePlayerId]);
                 status.ActivePlayerId = (status.ActivePlayerId + 1) % status.Players.length;
             }
             return {
                 Players: status.Players,
                 ActivePlayerId: status.ActivePlayerId,
                 Tiles: tiles,
-                NextAction: claimTile(status)
+                NextAction: tryClaimTile(status)
             };
         };
     };
@@ -631,20 +631,21 @@ var Functional;
 /// <reference path="Common.ts"/>
 var Functional;
 (function (Functional) {
-    Functional.isFree = function (tile) {
-        return tile.Claim !== undefined;
+    Functional.isOwned = function (tile) {
+        return tile.Owner !== undefined;
     };
     let createTile = function (id) {
         return {
-            Id: id,
-            Claim: function (player) {
-                return {
-                    Id: id,
-                    Owner: player,
-                    Armies: 1
-                };
-            }
+            Id: id
         };
     };
     Functional.createTiles = Functional.arrayCreator(createTile);
+    Functional.claimTile = function (tile, player) {
+        console.log("Player " + player.Id + " claiming tile " + tile.Id);
+        return {
+            Id: tile.Id,
+            Owner: player,
+            Armies: 1
+        };
+    };
 })(Functional || (Functional = {}));

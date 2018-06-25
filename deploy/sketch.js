@@ -64,13 +64,13 @@ function draw() {
 }
 
 function mouseClicked() {
-    gameStatus.NextAction(1);
     var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
-    if (tileId > 0) {
-        tileIndex = tileId - 1;
-        risk.action(tileIndex);
-        console.clear();
-        console.log(risk.getMessage());
-        draw();
-    }
+    risk.NextAction(tileId);
+    // if (tileId > 0) {
+    //     tileIndex = tileId - 1;
+    //     risk.action(tileIndex);
+    //     console.clear();
+    //     console.log(risk.getMessage());
+    //     draw();
+    // }
 }
