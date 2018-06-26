@@ -18,7 +18,6 @@ namespace Functional {
     export var  createTiles = arrayCreator(createTile)
 
     export var claimTile = function(tile: FreeTile, player: Player): OwnedTile {
-        console.log("Player " + player.Id + " claiming tile " + tile.Id);
         return {
             Id: tile.Id,
             Owner: player,

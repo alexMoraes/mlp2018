@@ -135,7 +135,7 @@ class Player {
 }
 const X = 1000;
 const Y = 600;
-const TILES = 52;
+const TILES = 4;
 const PLAYERS = 2;
 const COLORS = [[255, 0, 0],
     [0, 0, 255]];
@@ -587,6 +587,76 @@ var Functional;
 /// <reference path="Common.ts"/>
 var Functional;
 (function (Functional) {
+    let isSetupPhase = function (gamePhase) {
+        return gamePhase === "Setup";
+    };
+    let isTurnsPhase = function (gamePhase) {
+        return gamePhase === "Turns";
+    };
+    let isEndPhase = function (gamePhase) {
+        return gamePhase === "End";
+    };
+    Functional.nextState = function (gameState) {
+        let phase = nextPhase(gameState);
+        if (phase !== gameState.GamePhase) {
+            return {
+                ActivePlayerId: 0,
+                GamePhase: phase,
+                Message: gameState.Message,
+                Players: gameState.Players,
+                Tiles: gameState.Tiles
+            };
+        }
+        else {
+            return {
+                ActivePlayerId: (gameState.ActivePlayerId + 1) % gameState.Players.length,
+                GamePhase: gameState.GamePhase,
+                Message: gameState.Message,
+                Players: gameState.Players,
+                Tiles: gameState.Tiles
+            };
+        }
+    };
+    let nextPhase = function (gameState) {
+        if (isSetupPhase(gameState.GamePhase)) {
+            if (gameState.Tiles.every(tile => Functional.isOwned(tile)))
+                return "Turns";
+            return "Setup";
+        }
+        return "End";
+    };
+    let tryClaimTile = function (gameState, tileId) {
+        let tiles = gameState.Tiles;
+        let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
+        let tile = tiles[tileIndex];
+        let message = "";
+        if (!Functional.isOwned(tile)) {
+            let currentPlayer = gameState.Players[gameState.ActivePlayerId];
+            tiles[tileIndex] = Functional.claimTile(tile, gameState.Players[gameState.ActivePlayerId]);
+            message = "Player " + currentPlayer.Id + " claimed tile " + tile.Id;
+        }
+        else {
+            message = "Tile " + tile.Id + " was already taken by player " + tile.Owner.Id;
+        }
+        return {
+            GamePhase: gameState.GamePhase,
+            Players: gameState.Players,
+            ActivePlayerId: gameState.ActivePlayerId,
+            Tiles: tiles,
+            Message: message
+        };
+    };
+    let endGame = function (gameState) {
+        gameState.Message = "GAME OVER!";
+        return gameState;
+    };
+    Functional.takeAction = function (gameState, tileId) {
+        if (isSetupPhase(gameState.GamePhase))
+            return tryClaimTile(gameState, tileId);
+        if (isEndPhase(gameState.GamePhase))
+            return endGame(gameState);
+        return gameState;
+    };
     Functional.InitGame = function (players, tiles) {
         let pl = Functional.createPlayers(players);
         let incompleteStatus = {
@@ -595,29 +665,30 @@ var Functional;
             Tiles: Functional.createTiles(tiles)
         };
         return {
+            GamePhase: "Setup",
             Players: incompleteStatus.Players,
             ActivePlayerId: incompleteStatus.ActivePlayerId,
             Tiles: incompleteStatus.Tiles,
-            NextAction: tryClaimTile(incompleteStatus)
+            Message: "Starting"
         };
     };
-    let tryClaimTile = function (status) {
-        return function (tileId) {
-            let tiles = status.Tiles;
-            let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
-            let tile = tiles[tileIndex];
-            if (!Functional.isOwned(tile)) {
-                tiles[tileIndex] = Functional.claimTile(tile, status.Players[status.ActivePlayerId]);
-                status.ActivePlayerId = (status.ActivePlayerId + 1) % status.Players.length;
-            }
-            return {
-                Players: status.Players,
-                ActivePlayerId: status.ActivePlayerId,
-                Tiles: tiles,
-                NextAction: tryClaimTile(status)
-            };
-        };
-    };
+    // let tryClaimTile = function(status: IncompleteStatus): Action {
+    //     return function(tileId: number): GameState {
+    //         let tiles = status.Tiles;
+    //         let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
+    //         let tile = tiles[tileIndex];
+    //         if(!isOwned(tile)) {
+    //             tiles[tileIndex] = claimTile(tile, status.Players[status.ActivePlayerId]);
+    //             status.ActivePlayerId = (status.ActivePlayerId + 1) % status.Players.length;
+    //         }
+    //         return {
+    //             Players: status.Players,
+    //             ActivePlayerId: status.ActivePlayerId,
+    //             Tiles: tiles,
+    //             NextAction: tryClaimTile(status)
+    //         }
+    //     }
+    // }
 })(Functional || (Functional = {}));
 /// <reference path="Common.ts"/>
 var Functional;
@@ -641,7 +712,6 @@ var Functional;
     };
     Functional.createTiles = Functional.arrayCreator(createTile);
     Functional.claimTile = function (tile, player) {
-        console.log("Player " + player.Id + " claiming tile " + tile.Id);
         return {
             Id: tile.Id,
             Owner: player,

@@ -6,9 +6,9 @@ var img;
 
 function setup() {
     createCanvas(XX, YY);
-    risk = Functional.InitGame(2, 52);
-    console.log("Initializing game with " + risk.Players.length + " players and " + risk.Tiles.length + " tiles")
     riskOO = new RiskEngine();
+    risk = Functional.InitGame(riskOO.players.length, riskOO.tiles.length);
+    console.log("Initializing game with " + risk.Players.length + " players and " + risk.Tiles.length + " tiles")
     risk.matrix = riskOO.matrix;
     //console.log(risk)
     noLoop();
@@ -45,6 +45,7 @@ function setup() {
 }
 
 function draw() {
+    console.log(risk.GamePhase + ": " + risk.Message);
     for (var i = 0; i < risk.tiles.length; i++) {
         tile = risk.tiles[i]
         if (tile.owner != 0) {
@@ -65,7 +66,11 @@ function draw() {
 
 function mouseClicked() {
     var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
-    risk.NextAction(tileId);
+    risk = Functional.takeAction(risk, tileId);
+    risk = Functional.nextState(risk);
+    risk.matrix = riskOO.matrix;
+    draw();
+    //risk.NextAction(tileId);
     // if (tileId > 0) {
     //     tileIndex = tileId - 1;
     //     risk.action(tileIndex);
