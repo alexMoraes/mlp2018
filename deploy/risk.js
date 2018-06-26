@@ -695,7 +695,7 @@ var Functional;
 (function (Functional) {
     let playerColors = [[255, 0, 0], [0, 0, 255]];
     let createPlayer = function (id) {
-        return { Id: id, Code: id + 1, Color: playerColors[id] };
+        return { Id: id, Color: playerColors[id - 1] };
     };
     Functional.createPlayers = Functional.arrayCreator(createPlayer);
 })(Functional || (Functional = {}));
@@ -705,15 +705,21 @@ var Functional;
     Functional.isOwned = function (tile) {
         return tile.Owner !== undefined;
     };
-    let createTile = function (id) {
+    let createTile = function (ooTile) {
         return {
-            Id: id
+            Id: ooTile.id,
+            Neighbors: ooTile.borderers.map(function (neighbor) { return neighbor.id; }),
+            center: ooTile.center
         };
     };
-    Functional.createTiles = Functional.arrayCreator(createTile);
+    Functional.createTiles = function (ooTiles) {
+        return ooTiles.map(createTile);
+    };
     Functional.claimTile = function (tile, player) {
         return {
             Id: tile.Id,
+            Neighbors: tile.Neighbors,
+            center: tile.center,
             Owner: player,
             Armies: 1
         };

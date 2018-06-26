@@ -89,7 +89,7 @@ namespace Functional {
         return gameState;
     }
 
-    export var InitGame = function(players: number, tiles: number) : GameState {
+    export var InitGame = function(players: number, tiles: ITile[]) : GameState {
         let pl = createPlayers(players);
         let incompleteStatus = {
             Players: pl,

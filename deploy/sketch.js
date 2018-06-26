@@ -7,7 +7,7 @@ var img;
 function setup() {
     createCanvas(XX, YY);
     riskOO = new RiskEngine();
-    risk = Functional.InitGame(riskOO.players.length, riskOO.tiles.length);
+    risk = Functional.InitGame(riskOO.players.length, riskOO.tiles);
     console.log("Initializing game with " + risk.Players.length + " players and " + risk.Tiles.length + " tiles")
     risk.matrix = riskOO.matrix;
     //console.log(risk)
@@ -46,20 +46,21 @@ function setup() {
 
 function draw() {
     console.log(risk.GamePhase + ": " + risk.Message);
-    for (var i = 0; i < risk.tiles.length; i++) {
-        tile = risk.tiles[i]
-        if (tile.owner != 0) {
-            var player = risk.players[tile.owner - 1]
-            color = player.color;
-            x = risk.tiles[i].center[0];
-            y = risk.tiles[i].center[1];
+    for (var i = 0; i < risk.Tiles.length; i++) {
+        tile = risk.Tiles[i]
+        if (tile.Owner !== undefined) {
+            // var player = risk.players[tile.owner - 1]
+            var player = tile.Owner
+            color = player.Color;
+            x = risk.Tiles[i].center[0];
+            y = risk.Tiles[i].center[1];
             if (player.selectedTile != null && player.selectedTile.id == tile.id)
                 fill(color[0]-100, color[1]-100, color[2]-100);
             else
                 fill(color[0], color[1], color[2]);
             ellipse(x, y, 40, 40);
             fill(0, 0, 0);
-            text(String(tile.armies), x - 7, y + 9);
+            text(String(tile.Armies), x - 7, y + 9);
         }
     }
 }
