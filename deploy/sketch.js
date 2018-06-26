@@ -45,7 +45,7 @@ function setup() {
 }
 
 function draw() {
-    console.log(risk.GamePhase + ": " + risk.Message);
+    console.log(risk.Message);
     for (var i = 0; i < risk.Tiles.length; i++) {
         tile = risk.Tiles[i]
         if (tile.Owner !== undefined) {
@@ -68,9 +68,9 @@ function draw() {
 function mouseClicked() {
     var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
     risk = Functional.takeAction(risk, tileId);
-    risk = Functional.nextState(risk);
-    risk.matrix = riskOO.matrix;
     draw();
+    risk = Functional.nextPhase(risk);
+    risk.matrix = riskOO.matrix;
     //risk.NextAction(tileId);
     // if (tileId > 0) {
     //     tileIndex = tileId - 1;

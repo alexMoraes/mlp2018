@@ -588,42 +588,73 @@ var Functional;
 var Functional;
 (function (Functional) {
     let isSetupPhase = function (gamePhase) {
-        return gamePhase === "Setup";
+        return gamePhase.FreeTiles !== undefined;
     };
     let isTurnsPhase = function (gamePhase) {
-        return gamePhase === "Turns";
+        return isDeployStep(gamePhase);
     };
-    let isEndPhase = function (gamePhase) {
-        return gamePhase === "End";
+    let isDeployStep = function (gameState) {
+        return gameState.Armies !== undefined;
     };
-    Functional.nextState = function (gameState) {
-        let phase = nextPhase(gameState);
-        if (phase !== gameState.GamePhase) {
-            return {
-                ActivePlayerId: 0,
-                GamePhase: phase,
-                Message: gameState.Message,
-                Players: gameState.Players,
-                Tiles: gameState.Tiles
-            };
-        }
-        else {
-            return {
-                ActivePlayerId: (gameState.ActivePlayerId + 1) % gameState.Players.length,
-                GamePhase: gameState.GamePhase,
-                Message: gameState.Message,
-                Players: gameState.Players,
-                Tiles: gameState.Tiles
-            };
-        }
+    let isCombatStep = function (gameState) {
+        return gameState.Combat !== undefined;
     };
-    let nextPhase = function (gameState) {
-        if (isSetupPhase(gameState.GamePhase)) {
+    let isEndPhase = function (gameState) {
+        return gameState.Winner !== undefined;
+    };
+    let getPlayerArmies = function (gameState, player) {
+        return Math.max(3, gameState.Tiles.filter(Functional.isOwned).filter(tile => tile.Owner.Id === player.Id).length / 3);
+    };
+    let startTurnsPhase = function (gameState) {
+        return {
+            ActivePlayer: gameState.Players[0],
+            Armies: getPlayerArmies(gameState, gameState.Players[0]),
+            Message: "Starting turns",
+            Players: gameState.Players,
+            PlayerTiles: gameState.Tiles.filter(Functional.isOwned).filter(tile => tile.Owner.Id === gameState.Players[0].Id),
+            Tiles: gameState.Tiles,
+        };
+    };
+    let nextTurn = function (gameState) {
+        let player = nextPlayer(gameState);
+        return {
+            ActivePlayer: player,
+            Armies: getPlayerArmies(gameState, player),
+            Message: "Starting player " + player.Id + " turn",
+            Players: gameState.Players,
+            PlayerTiles: gameState.Tiles.filter(Functional.isOwned).filter(tile => tile.Owner.Id === player.Id),
+            Tiles: gameState.Tiles
+        };
+    };
+    let startCombatPhase = function (gameState) {
+        return {
+            ActivePlayer: gameState.ActivePlayer,
+            Message: "Starting combat",
+            Players: gameState.Players,
+            Tiles: gameState.Tiles,
+            Combat: 0
+        };
+    };
+    Functional.nextPhase = function (gameState) {
+        if (isSetupPhase(gameState)) {
             if (gameState.Tiles.every(tile => Functional.isOwned(tile)))
-                return "Turns";
-            return "Setup";
+                return startTurnsPhase(gameState);
+            return gameState;
         }
-        return "End";
+        if (isDeployStep(gameState)) {
+            if (gameState.Armies === 0)
+                return startCombatPhase(gameState);
+            return gameState;
+        }
+        if (isCombatStep(gameState)) {
+            return nextTurn(gameState);
+        }
+        return {
+            Tiles: gameState.Tiles,
+            Players: gameState.Players,
+            Message: "GAME OVER!",
+            Winner: gameState.Players[0]
+        };
     };
     let tryClaimTile = function (gameState, tileId) {
         let tiles = gameState.Tiles;
@@ -631,29 +662,65 @@ var Functional;
         let tile = tiles[tileIndex];
         let message = "";
         if (!Functional.isOwned(tile)) {
-            let currentPlayer = gameState.Players[gameState.ActivePlayerId];
-            tiles[tileIndex] = Functional.claimTile(tile, gameState.Players[gameState.ActivePlayerId]);
-            message = "Player " + currentPlayer.Id + " claimed tile " + tile.Id;
+            tiles[tileIndex] = Functional.claimTile(tile, gameState.ActivePlayer);
+            message = "Player " + gameState.ActivePlayer.Id + " claimed tile " + tile.Id;
         }
         else {
             message = "Tile " + tile.Id + " was already taken by player " + tile.Owner.Id;
         }
         return {
-            GamePhase: gameState.GamePhase,
             Players: gameState.Players,
-            ActivePlayerId: gameState.ActivePlayerId,
+            FreeTiles: tiles.filter(t => !Functional.isOwned(tile)),
+            ActivePlayer: nextPlayer(gameState),
             Tiles: tiles,
             Message: message
         };
+    };
+    let nextPlayer = function (gameState) {
+        let index = gameState.Players.findIndex(player => player.Id === gameState.ActivePlayer.Id);
+        let length = gameState.Players.length;
+        let next = gameState.Players[(index + 1) % length];
+        return next;
     };
     let endGame = function (gameState) {
         gameState.Message = "GAME OVER!";
         return gameState;
     };
+    let deployArmies = function (gameState, tileId) {
+        let tile = gameState.PlayerTiles.find(t => t.Id === tileId);
+        if (tile === undefined) {
+            return {
+                ActivePlayer: gameState.ActivePlayer,
+                Armies: gameState.Armies,
+                Message: "Unowned tile",
+                Players: gameState.Players,
+                PlayerTiles: gameState.PlayerTiles,
+                Tiles: gameState.Tiles
+            };
+        }
+        else {
+            tile.Armies += 1;
+            return {
+                ActivePlayer: gameState.ActivePlayer,
+                Armies: gameState.Armies - 1,
+                Message: "Army placed",
+                Players: gameState.Players,
+                PlayerTiles: gameState.PlayerTiles,
+                Tiles: gameState.Tiles
+            };
+        }
+    };
+    let takeTurnAction = function (gameState, tileId) {
+        if (isDeployStep(gameState))
+            return deployArmies(gameState, tileId);
+        return endGame(gameState);
+    };
     Functional.takeAction = function (gameState, tileId) {
-        if (isSetupPhase(gameState.GamePhase))
+        if (isSetupPhase(gameState))
             return tryClaimTile(gameState, tileId);
-        if (isEndPhase(gameState.GamePhase))
+        if (isTurnsPhase(gameState))
+            return takeTurnAction(gameState, tileId);
+        if (isEndPhase(gameState))
             return endGame(gameState);
         return gameState;
     };
@@ -665,30 +732,13 @@ var Functional;
             Tiles: Functional.createTiles(tiles)
         };
         return {
-            GamePhase: "Setup",
-            Players: incompleteStatus.Players,
-            ActivePlayerId: incompleteStatus.ActivePlayerId,
             Tiles: incompleteStatus.Tiles,
+            FreeTiles: incompleteStatus.Tiles,
+            Players: incompleteStatus.Players,
+            ActivePlayer: incompleteStatus.Players[0],
             Message: "Starting"
         };
     };
-    // let tryClaimTile = function(status: IncompleteStatus): Action {
-    //     return function(tileId: number): GameState {
-    //         let tiles = status.Tiles;
-    //         let tileIndex = tiles.findIndex(tile => tile.Id == tileId);
-    //         let tile = tiles[tileIndex];
-    //         if(!isOwned(tile)) {
-    //             tiles[tileIndex] = claimTile(tile, status.Players[status.ActivePlayerId]);
-    //             status.ActivePlayerId = (status.ActivePlayerId + 1) % status.Players.length;
-    //         }
-    //         return {
-    //             Players: status.Players,
-    //             ActivePlayerId: status.ActivePlayerId,
-    //             Tiles: tiles,
-    //             NextAction: tryClaimTile(status)
-    //         }
-    //     }
-    // }
 })(Functional || (Functional = {}));
 /// <reference path="Common.ts"/>
 var Functional;
