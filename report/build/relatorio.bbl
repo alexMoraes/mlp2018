@@ -18,17 +18,10 @@ Acessado em 10/05/2018.
 Available from Internet:
   \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory\_Management}.}
 
-\bibitem[Typescript 2018]{typescript}
-\abntrefinfo{Typescript}{TYPESCRIPT}{2018a}
-{TYPESCRIPT. 2018.
-Acessado em 10/05/2018.
-Available from Internet: \url{https://www.typescriptlang.org/}.}
-
-\bibitem[Typescript 2018]{tsFunctions}
-\abntrefinfo{Typescript}{TYPESCRIPT}{2018b}
-{TYPESCRIPT. 2018.
-Acessado em 10/05/2018.
+\bibitem[Typescript 2018]{advancedtypes}
+\abntrefinfo{Typescript}{TYPESCRIPT}{2018}
+{TYPESCRIPT. \textbf{Advanced Types}. 2018.
 Available from Internet:
-  \url{https://www.typescriptlang.org/docs/handbook/functions.html}.}
+  \url{https://www.typescriptlang.org/docs/handbook/advanced-types.html}.}
 
 \end{thebibliography}

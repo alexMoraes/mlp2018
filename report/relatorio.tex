@@ -292,6 +292,11 @@ Typescript não possui suporte nativo para currying. Sendo assim, não existe um
 \begin{verbatim}
 type Die = () => number;
 type DiceRoll = (n: number) => number[];
+
+let sixSidedDice = function(): number {
+    return Math.ceil(Math.random() * 6);
+}
+
 let rollDice = function(die: Die): DiceRoll {
     return function(n: number) : number[] {
         return Array
@@ -307,12 +312,44 @@ let rollDice = function(die: Die): DiceRoll {
 
 \section{Pattern Matching}
 
-Pattern Matching é uma das ferramentas mais poderosas de linguagens funcionais. Esta nos permite procurar padrões em estruturas de dados, casando-os com seus respectivos tipos. Infelizmente, a linguagem Typescript não suporta Pattern Matching nativamente, portando tentamos simulá-lo definindo alguns métodos para testar se uma determinada estrutura de dados casa com certos padrões de tipos, como pode ser visto na figura.
+Pattern Matching é uma das ferramentas mais poderosas de linguagens funcionais. Esta nos permite procurar padrões em estruturas de dados, casando-os com seus respectivos tipos. Infelizmente, a linguagem Typescript não suporta Pattern Matching nativamente. O que a linguagem oferece é a possibilidade de definir \textit{type-guards}, expressões que executam uma verficação em tempo de execução que garante o tipo num determinado escopo \cite{advancedtypes}. Para isso é necessário implementar manualmente funções cujo tipo de retorno é um predicado de tipo. O uso dessa técnica está exemplificado na Figura \ref{fig:typeguards}.
+%ref https://www.typescriptlang.org/docs/handbook/advanced-types.html
 
+\begin{figure}[h]
+\begin{verbatim}
+let isDeployStep =
+    function(state: GameState): gameState is DeployStep {
+    return (<DeployStep>gameState).Armies !== undefined;
+}
+
+let deployArmies =
+    function(state: DeployStep, id: number): DeployStep {
+...
+}
+
+let takeCombatAction =
+    function(state: CombatStep, id: number): CombatStep {
+...
+}
+
+let takeTurnAction =
+    function(state: TurnPhase, id: number): GameState {
+    if(isDeployStep(state))
+        return deployArmies(state, id);
+    else
+        return takeCombatAction(state, id);
+}
+\end{verbatim}
+\caption{Type guards}
+\legend{Fonte: Os Autores}
+\label{fig:typeguards}
+\end{figure}
 
 \section{Funções de ordem maior}
 
 Em programação funcional, o conceito de funções de ordem maior é muito utilizado para facilitar a programação de certos comportamentos desejados no programa. Em geral, são funções que recebem outras funções como parâmetro, e podem utilizá-las como for necessário.
+
+A função \texttt{rollDice} da Figura \ref{fig:currying} é um exemplo de função de ordem maior. Ela recebe como parâmetro uma função que representa um dado a ser rolado na fase de combate do jogo. A função \texttt{sixSidedDice} implementa um dado de seis faces e pode ser passado para a função \texttt{rollDice}. Caso exista a necessidade da rolagem de outros tipos de dados, sua implementação pode ser feita sem a necessidade de alteração na função \texttt{rollDice}.
 
 
 \section{Funções de ordem maior prontas}

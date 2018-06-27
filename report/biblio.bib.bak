@@ -32,6 +32,16 @@
   Timestamp                = {2018.05.10}
 }
 
+@Electronic{tsFunctions,
+  Author                   = {Typescript},
+  Note                     = {Acessado em 10/05/2018},
+  Url                      = {https://www.typescriptlang.org/docs/handbook/functions.html},
+  Year                     = {2018},
+
+  Owner                    = {alexmoraes},
+  Timestamp                = {2018.05.11}
+}
+
 @Electronic{typescript,
   Author                   = {Typescript},
   Note                     = {Acessado em 10/05/2018},
@@ -40,5 +50,16 @@
 
   Owner                    = {alexmoraes},
   Timestamp                = {2018.05.10}
+}
+
+@Electronic{advancedtypes,
+  Title                    = {Advanced Types},
+  Author                   = {typescriptlang},
+  Month                    = {06},
+  Url                      = {https://www.typescriptlang.org/docs/handbook/advanced-types.html},
+  Year                     = {2018},
+
+  Owner                    = {alexmoraes},
+  Timestamp                = {2018.06.27}
 }
 
