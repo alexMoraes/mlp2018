@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.10)  27 JUN 2018 00:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.10)  27 JUN 2018 00:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1542,47 +1542,38 @@ Package babel Info: Redefining portuges shorthand "|
 [12]
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 317.
-
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 321.
-
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 355.
+(babel)             in language  on input line 359.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 355.
-[13
+(babel)             in language  on input line 359.
+ [13
 
 ]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 359.
+
+No file relatorio.bbl.
+
+AED: lastpage setting LastPage
+
 Underfull \hbox (badness 10000) has occurred while \output is active
 \T1/ptm/m/n/10.95 14
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 355.
+(babel)             in language  on input line 381.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 355.
-[14]
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 355.
-
-No file relatorio.bbl.
-
-AED: lastpage setting LastPage
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 377.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 377.
-[15
+(babel)             in language  on input line 381.
+[14
 
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 377.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 377.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 377.
+(babel)             in language  on input line 381.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 381.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 381.
  (./relatorio.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 377.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 377.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 381.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 381.
 Package rerunfilecheck Info: File `relatorio.out' has not changed.
 (rerunfilecheck)             Checksum: 9B10266F9706CA15853258968B4A8A42;3906.
 
@@ -1592,11 +1583,11 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 377.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 381.
  ) 
 Here is how much of TeX's memory you used:
- 22237 strings out of 493029
- 353865 string characters out of 6136234
+ 22236 strings out of 493029
+ 353858 string characters out of 6136234
  435483 words of memory out of 5000000
  25436 multiletter control sequences out of 15000+600000
  28374 words of font info for 45 fonts, out of 8000000 for 9000
@@ -1606,10 +1597,10 @@ Here is how much of TeX's memory you used:
 e/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on relatorio.pdf (15 pages, 231935 bytes).
+Output written on relatorio.pdf (14 pages, 232086 bytes).
 PDF statistics:
- 259 PDF objects out of 1000 (max. 8388607)
- 228 compressed objects within 3 object streams
- 59 named destinations out of 1000 (max. 500000)
+ 255 PDF objects out of 1000 (max. 8388607)
+ 225 compressed objects within 3 object streams
+ 58 named destinations out of 1000 (max. 500000)
  213 words of extra memory for PDF output out of 10000 (max. 10000000)
 

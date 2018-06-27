@@ -373,26 +373,34 @@ Após a realização das atividades propostas, sintetizamos uma tabela visando a
 \label{aval}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-Simplicidade          			&  7	&  \\ \hline
-Ortogonalidade        			&  5	&  \\ \hline
-Estrutura de Controle 			&  9	&  \\ \hline
-Tipos de Dados        			&  9	&  \\ \hline
-Estruturas de Dados   			&  9	&  \\ \hline
-Suporte a Abstração de Dados    &  9	&  \\ \hline
-Suporte a Abstração de Controle	&  9	&  \\ \hline
-Expressividade        			&  8	&  \\ \hline
-Checagem de Tipos     			&  10	&  \\ \hline
-Restrições de Aliasing        	&  		&  \\ \hline
-Tratamento de Excessões 		&  		&  \\ \hline
-Portabilidade        			&  10	&  \\ \hline
-Reusabilidade          			&  9	&  \\ \hline
-Tamanho de Código        		&  8	&  \\ \hline
+Simplicidade          			&  7  \\ \hline
+Ortogonalidade        			&  5  \\ \hline
+Estrutura de Controle 			&  9  \\ \hline
+Tipos de Dados        			&  9  \\ \hline
+Estruturas de Dados   			&  9  \\ \hline
+Suporte a Abstração de Dados    &  9  \\ \hline
+Suporte a Abstração de Controle	&  9  \\ \hline
+Expressividade        			&  8  \\ \hline
+Checagem de Tipos     			&  10 \\ \hline
+Restrições de Aliasing        	&  	  \\ \hline
+Tratamento de Excessões 		&  	  \\ \hline
+Portabilidade        			&  10 \\ \hline
+Reusabilidade          			&  9  \\ \hline
+Tamanho de Código        		&  8  \\ \hline
 \end{tabular}
 \end{table}
 
 \textbf{Simplicidade:} Pela linguagem não possuir inferência de tipos, o que torna o código mais poluído com declarações de tipos, demos nota 7 para a linguagem neste quesito.
 
+\textbf{Ortogonalidade:} Por Typescript ser uma extensão de Javascript, muitas das tipagens e obrigatoriedades se misturam com a pluralidade do Javascript nativo e de suas bibliotecas, o que diminui consideravelmente a ortogonalidade da linguagem.
+
+\textbf{Expressividade:} Em um geral, nos contentamos com a expressividade do Typescript com apenas a ressalva de que a sobrecarga de parâmetros não é trivial, o que nos fez retirar alguns pontos neste quesito.
+
+\textbf{Checagem de Tipos:} O grande diferencial do Typescript é a checagem de tipos, que o faz se distanciar positivamente da sua origem, o Javascript. O Typescript se propõe a adicionar a checagem de tipos e a faz com excelência.
+
 \textbf{Portabilidade:} Pelo fato da linguagem "compilar" para javascript, que pode ser executado em qualquer navegador, a linguagem é extremamente portável, portando atribuímos nota 10.
+
+\textbf{Tamanho de Código:} O código gerado é mais verboso que o próprio Javascript, mas nada que atrapalhe o desenvolvimento ou que possa ser considerado ruim. Vale ressaltar aqui também que o código gerado em Javascript é maior que o código em Typescript.
 
 
 
