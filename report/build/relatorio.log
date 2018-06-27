@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.3)  27 JUN 2018 00:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.3)  27 JUN 2018 01:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1616,10 +1616,10 @@ e/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on build/relatorio.pdf (16 pages, 248661 bytes).
+Output written on build/relatorio.pdf (16 pages, 248944 bytes).
 PDF statistics:
- 295 PDF objects out of 1000 (max. 8388607)
- 262 compressed objects within 3 object streams
+ 296 PDF objects out of 1000 (max. 8388607)
+ 263 compressed objects within 3 object streams
  67 named destinations out of 1000 (max. 500000)
  221 words of extra memory for PDF output out of 10000 (max. 10000000)
 
