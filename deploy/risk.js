@@ -602,8 +602,20 @@ var Functional;
     let isSelectAttackerStep = function (gameState) {
         return gameState.Attackers !== undefined;
     };
+    let isSelectAttackerStepPos = function (gameState) {
+        return gameState.SelectedAttacker !== undefined;
+    };
+    let isSelectAttackerStepPre = function (gameState) {
+        return isSelectAttackerStep(gameState) && !isSelectAttackerStepPos(gameState);
+    };
     let isSelectDefenderStep = function (gameState) {
         return gameState.Defenders !== undefined;
+    };
+    let isSelectDefenderStepPos = function (gameState) {
+        return gameState.SelectedDefender !== undefined;
+    };
+    let isSelectDefenderStepPre = function (gameState) {
+        return isSelectDefenderStep(gameState) && !isSelectDefenderStepPos(gameState);
     };
     let isEndPhase = function (gameState) {
         return gameState.Winner !== undefined;
@@ -642,7 +654,20 @@ var Functional;
             Message: "Starting combat",
             Players: gameState.Players,
             Tiles: gameState.Tiles,
-            Attackers: getPlayerAttackers(gameState, gameState.ActivePlayer)
+            Attackers: getPlayerAttackers(gameState, gameState.ActivePlayer),
+            SelectedAttacker: undefined
+        };
+    };
+    let startSelectDefendersPhase = function (gameState) {
+        return {
+            ActivePlayer: gameState.ActivePlayer,
+            Defenders: getDefenders(gameState, gameState.SelectedAttacker),
+            Message: "Selecting defender",
+            Players: gameState.Players,
+            PlayerTiles: gameState.PlayerTiles,
+            SelectedAttacker: gameState.SelectedAttacker,
+            SelectedDefender: undefined,
+            Tiles: gameState.Tiles
         };
     };
     Functional.nextPhase = function (gameState) {
@@ -657,6 +682,24 @@ var Functional;
             return gameState;
         }
         if (isSelectAttackerStep(gameState)) {
+            if (isSelectAttackerStepPos(gameState))
+                return startSelectDefendersPhase(gameState);
+            else
+                return gameState;
+        }
+        if (isSelectDefenderStep(gameState)) {
+            if (isSelectDefenderStepPos(gameState)) {
+                let owners = gameState.Tiles.filter(Functional.isOwned).map(function (t) { return t.Owner.Id; });
+                let count = owners.filter(function (v, i) { return i == owners.lastIndexOf(v); }).length;
+                if (count === 1)
+                    return endGame(gameState, gameState.ActivePlayer);
+                else {
+                    if (gameState.PlayerTiles.filter(Functional.isAttacker).length === 0)
+                        return nextTurn(gameState);
+                    else
+                        startCombatPhase(gameState);
+                }
+            }
         }
         return {
             Tiles: gameState.Tiles,
@@ -691,9 +734,13 @@ var Functional;
         let next = gameState.Players[(index + 1) % length];
         return next;
     };
-    let endGame = function (gameState) {
-        gameState.Message = "GAME OVER!";
-        return gameState;
+    let endGame = function (gameState, winner) {
+        return {
+            Message: "GAME OVER!",
+            Players: gameState.Players,
+            Tiles: gameState.Tiles,
+            Winner: winner
+        };
     };
     let deployArmies = function (gameState, tileId) {
         let tile = gameState.PlayerTiles.find(t => t.Id === tileId);
@@ -735,16 +782,17 @@ var Functional;
         else {
             return {
                 ActivePlayer: gameState.ActivePlayer,
-                Defenders: getDefenders(gameState, attacker),
                 Message: "Player " + gameState.ActivePlayer.Id + " is declaring an attack with tile " + attacker.Id,
                 Players: gameState.Players,
                 PlayerTiles: gameState.PlayerTiles,
                 SelectedAttacker: attacker,
-                Tiles: gameState.Tiles
+                Tiles: gameState.Tiles,
+                Attackers: gameState.Attackers
             };
         }
     };
     let selectDefender = function (gameState, tileId) {
+        console.log("Selecting defender");
         let tile = gameState.Defenders.find(tile => tile.Id === tileId);
         if (tile === undefined) {
             gameState.Message = "Invalid tile";
@@ -757,44 +805,77 @@ var Functional;
                 Message: "Player " + gameState.ActivePlayer.Id + " declared an attack on tile " + tile.Id,
                 Players: gameState.Players,
                 PlayerTiles: gameState.PlayerTiles,
-                SelectDefender: tile,
+                SelectedDefender: tile,
                 SelectedAttacker: gameState.SelectedAttacker,
                 Tiles: gameState.Tiles
             };
         }
     };
+    let sixSidedDice = function () {
+        return Math.ceil(Math.random() * 6);
+    };
+    let rollDice = function (die) {
+        return function (n) {
+            return Array.apply(null, { length: n }).map(Function.call, die);
+        };
+    };
+    let riskDice = rollDice(sixSidedDice);
+    let resolveRoll = function (attDice, defDice) {
+        let totalDice = Math.min(attDice, defDice);
+        return function (rolls) {
+            return rolls.sort().slice(0, totalDice);
+        };
+    };
     let resolveCombat = function (gameState) {
         let attDice = Math.min(3, gameState.SelectedAttacker.Armies - 1);
-        let defDice = Math.min(3, gameState.SelectDefender.Armies);
-        return gameState;
+        let defDice = Math.min(3, gameState.SelectedDefender.Armies);
+        let resolve = resolveRoll(attDice, defDice);
+        let attRolls = resolve(riskDice(attDice));
+        let defRolls = resolve(riskDice(defDice));
+        let result = attRolls.filter(function (element, index) { return element > defRolls[index]; }).length;
+        gameState.SelectedDefender.Armies -= result;
+        gameState.SelectedAttacker.Armies -= attRolls.length - result;
+        if (gameState.SelectedDefender.Armies <= 0) {
+            gameState.SelectedDefender.Armies = attDice - attRolls.length + result;
+            gameState.SelectedDefender.Owner = gameState.ActivePlayer;
+        }
+        return {
+            ActivePlayer: gameState.ActivePlayer,
+            Message: "End of combat",
+            Players: gameState.Players,
+            PlayerTiles: gameState.Tiles.filter(Functional.isOwned).filter(tile => tile.Owner.Id === gameState.Players[0].Id),
+            SelectedAttacker: gameState.SelectedAttacker,
+            Tiles: gameState.Tiles,
+            Defenders: gameState.Defenders
+        };
     };
     let takeCombatAction = function (gameState, tileId) {
+        console.log("Combat");
         if (isSelectAttackerStep(gameState))
             return selectAttacker(gameState, tileId);
-        if (isSelectDefenderStep(gameState)) {
-            let step = selectDefender(gameState, tileId);
-            if (isSelectDefenderStep(step))
-                return step;
-            else
-                return resolveCombat(step);
+        else {
+            let defender = selectDefender(gameState, tileId);
+            if (isSelectDefenderStepPos(defender)) {
+                return resolveCombat(defender);
+            }
+            else {
+                return defender;
+            }
         }
-        return gameState;
     };
     let takeTurnAction = function (gameState, tileId) {
         if (isDeployStep(gameState))
             return deployArmies(gameState, tileId);
-        if (isCombatStep(gameState))
+        else
             return takeCombatAction(gameState, tileId);
-        return endGame(gameState);
     };
     Functional.takeAction = function (gameState, tileId) {
         if (isSetupPhase(gameState))
             return tryClaimTile(gameState, tileId);
         if (isTurnsPhase(gameState))
             return takeTurnAction(gameState, tileId);
-        if (isEndPhase(gameState))
-            return endGame(gameState);
-        return gameState;
+        else
+            return gameState;
     };
     Functional.InitGame = function (players, tiles) {
         let pl = Functional.createPlayers(players);
