@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.10)  27 JUN 2018 01:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.10)  27 JUN 2018 01:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1575,20 +1575,27 @@ Package babel Info: Redefining portuges shorthand "|
  [15]
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 435.
-
-No file relatorio.bbl.
-
-AED: lastpage setting LastPage
-
+ (./relatorio.bbl
 Underfull \hbox (badness 10000) has occurred while \output is active
 \T1/ptm/m/n/10.95 16
  []
 
 Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 3.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 3.
+[16
+
+]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 3.
+) 
+AED: lastpage setting LastPage
+Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 457.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 457.
-[16
+[17
 
 ]
 Package babel Info: Redefining portuges shorthand "|
@@ -1598,9 +1605,15 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 457.
  (./relatorio.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 457.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 457.
-Package rerunfilecheck Info: File `relatorio.out' has not changed.
-(rerunfilecheck)             Checksum: 9B10266F9706CA15853258968B4A8A42;3906.
 
+
+Package rerunfilecheck Warning: File `relatorio.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `relatorio.out':
+(rerunfilecheck)             Before: 9B10266F9706CA15853258968B4A8A42;3906
+(rerunfilecheck)             After:  056EB996377BC0BF8B014D74E48F5B61;4009.
 
 LaTeX Warning: There were undefined references.
 
@@ -1610,10 +1623,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 457.
  ) 
 Here is how much of TeX's memory you used:
- 22270 strings out of 493029
- 354315 string characters out of 6136234
+ 22289 strings out of 493029
+ 354579 string characters out of 6136234
  435561 words of memory out of 5000000
- 25461 multiletter control sequences out of 15000+600000
+ 25472 multiletter control sequences out of 15000+600000
  28995 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  48i,9n,45p,10365b,1099s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1622,10 +1635,10 @@ e/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on relatorio.pdf (16 pages, 250248 bytes).
+Output written on relatorio.pdf (17 pages, 251834 bytes).
 PDF statistics:
- 274 PDF objects out of 1000 (max. 8388607)
- 241 compressed objects within 3 object streams
- 62 named destinations out of 1000 (max. 500000)
+ 290 PDF objects out of 1000 (max. 8388607)
+ 256 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
  213 words of extra memory for PDF output out of 10000 (max. 10000000)
 

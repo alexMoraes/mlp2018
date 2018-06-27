@@ -24,4 +24,5 @@
 \contentsline {section}{\numberline {5.7}Recurs\IeC {\~a}o}{13}{section.5.7}
 \contentsline {chapter}{6~An\IeC {\'a}lise cr\IeC {\'\i }tica}{14}{CHAPTER.6}
 \contentsline {chapter}{7~Conclus\IeC {\~a}o}{16}{CHAPTER.7}
+\contentsline {chapter}{\xspace {}Refer{\^e}ncias}{17}{schapter.2}
 \contentsfinish 
