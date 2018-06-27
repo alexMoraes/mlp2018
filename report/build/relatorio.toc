@@ -17,7 +17,7 @@
 \contentsline {chapter}{5~Abordagem funcional}{11}{CHAPTER.5}
 \contentsline {section}{\numberline {5.1}Fun\IeC {\c c}\IeC {\~o}es Lambda}{11}{section.5.1}
 \contentsline {section}{\numberline {5.2}Currying}{11}{section.5.2}
-\contentsline {section}{\numberline {5.3}Pattern Matching}{11}{section.5.3}
+\contentsline {section}{\numberline {5.3}Pattern Matching}{12}{section.5.3}
 \contentsline {section}{\numberline {5.4}Fun\IeC {\c c}\IeC {\~o}es de ordem maior}{12}{section.5.4}
 \contentsline {section}{\numberline {5.5}Fun\IeC {\c c}\IeC {\~o}es de ordem maior prontas}{13}{section.5.5}
 \contentsline {section}{\numberline {5.6}Fun\IeC {\c c}\IeC {\~o}es de primeira ordem}{13}{section.5.6}

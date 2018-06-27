@@ -292,6 +292,11 @@ Typescript não possui suporte nativo para currying. Sendo assim, não existe um
 \begin{verbatim}
 type Die = () => number;
 type DiceRoll = (n: number) => number[];
+
+let sixSidedDice = function(): number {
+    return Math.ceil(Math.random() * 6);
+}
+
 let rollDice = function(die: Die): DiceRoll {
     return function(n: number) : number[] {
         return Array
@@ -343,6 +348,8 @@ let takeTurnAction =
 \section{Funções de ordem maior}
 
 Em programação funcional, o conceito de funções de ordem maior é muito utilizado para facilitar a programação de certos comportamentos desejados no programa. Em geral, são funções que recebem outras funções como parâmetro, e podem utilizá-las como for necessário.
+
+A função \texttt{rollDice} da Figura \ref{fig:currying} é um exemplo de função de ordem maior. Ela recebe como parâmetro uma função que representa um dado a ser rolado na fase de combate do jogo. A função \texttt{sixSidedDice} implementa um dado de seis faces e pode ser passado para a função \texttt{rollDice}. Caso exista a necessidade da rolagem de outros tipos de dados, sua implementação pode ser feita sem a necessidade de alteração na função \texttt{rollDice}.
 
 
 \section{Funções de ordem maior prontas}
