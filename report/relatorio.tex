@@ -145,7 +145,7 @@ Este trabalho tem por objetivo a implementação de uma aplicação em uma lingu
 
 TypeScript é um superconjunto da linguagem JavaScript desenvolvida pela Microsoft, projetada com o objetivo de reduzir a complexidade de código produzido em JavaScript. Ao contrário de JavaScript, TypeScript é uma linguagem compilada e o produto final da compilação é código em JavaScript que pode ser interpertado por qualquer motor que suporte o padrão ECMAScript 3 ou superior.
 
-Outra diferença em relação a sua predecessora é a possibilidade de tipagem estática. Quando são adicionadas anotações de tipo às declarações, a checagem de tipos é feita em tempo de compilação. Adicionalmente, existe a possibilidade do uso de classes, interfaces, módulos e \textit{namespaces}. Além disso, sendo uma extensão do padrão ECMAScript 5, qualquer programa em JavaScript é um programa TypeScript válido \cite{typescript}.
+Outra diferença em relação a sua predecessora é a possibilidade de tipagem estática. Quando são adicionadas anotações de tipo às declarações, a checagem de tipos é feita em tempo de compilação. Adicionalmente, existe a possibilidade do uso de classes, interfaces, módulos e \textit{namespaces}. Além disso, sendo uma extensão do padrão ECMAScript 5, qualquer programa em JavaScript é um programa TypeScript válido.
 
 
 \section{Paradigma funcional}
@@ -269,13 +269,55 @@ Neste trecho de código, o polimorfismo por inclusão ocorre pois a propriedade 
 
 \section{Polimorfismo por sobrecarga}
 
-O polimorfismo por sobrecarga acontece quando usamos um mesmo método com parâmetros diferentes. Não usamos no trabalho pois TypeScript não suporta sobrecarga de operandos\cite{tsFunctions}.
+O polimorfismo por sobrecarga acontece quando usamos um mesmo método com parâmetros diferentes. Não usamos no trabalho pois TypeScript não suporta sobrecarga de operandos.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Capítulo 3
+% Capítulo 5
 %
 \chapter{Abordagem funcional}
+
+\section{Funções Lambda}
+
+Funções lambda, ou funções anonimas, são funções que essencialmente não possuem nome ou identificador, e geralmente são armazenadas em variáveis para serem manipuladas ou passadas por parâmetro.
+
+
+\section{Currying}
+
+Currying é o processo de traduzir uma função de multiplos argumentos para uma função de um único argumento, que tem como retorno uma função que recebe um argumento a menos que a anterior. É um recurso extremamente poderoso das linguagens funcionais, e pode ser muito bem explorado se utilizado em conjunto com o conceito de funções de primeira ordem.
+
+\section{Pattern Matching}
+
+Pattern Matching é uma das ferramentas mais poderosas de linguagens funcionais. Esta nos permite procurar padrões em estruturas de dados, casando-os com seus respectivos tipos. Infelizmente, a linguagem Typescript não suporta Pattern Matching nativamente, portando tentamos simulá-lo definindo alguns métodos para testar se uma determinada estrutura de dados casa com certos padrões de tipos, como pode ser visto na figura.
+
+
+\section{Funções de ordem maior}
+
+Em programação funcional, o conceito de funções de ordem maior é muito utilizado para facilitar a programação de certos comportamentos desejados no programa. Em geral, são funções que recebem outras funções como parâmetro, e podem utilizá-las como for necessário.
+
+
+\section{Funções de ordem maior prontas}
+
+Quando uma linguagem de programação permite o uso de funções de ordem maior, é comum que a mesma também forneça funções de alta ordem prontas, como \textit{map}, \textit{reduce}, entre outras. 
+
+
+\section{Funções de primeira ordem}
+
+Ao permitir a definição de funções de ordem maior, a linguagem de programação também deve permitir o uso de funções de primeira ordem. Estas são funções que podem ser tratadas como valores, ou seja, podem ser armazenadas, passadas por parâmetro, retornadas, etc.
+
+
+\section{Recursão}
+
+Ao falarmos do paradigma funcional, é impossível não envolver recursão. O princípio da recursão reside em definir funções que possam chamar à sí mesmas. O uso desta abordagem permite criar soluções mais elegantes e até mesmo mais fáceis de se programar para problemas que podem ser complexos quando abordados de outra forma.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Capítulo 6
+%
+\chapter{Análise crítica}
+
+Após a realização das atividades propostas, sintetizamos uma tabela visando avaliar os principais aspectos da linguagem Typescript, tanto positivos quanto negativos 
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
