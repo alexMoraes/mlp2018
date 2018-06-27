@@ -4,9 +4,14 @@ namespace Functional {
     export type Tile = FreeTile | OwnedTile;
     export type FreeTile = { Id: number, Neighbors: number[], center: [number, number] };
     export type OwnedTile = FreeTile & { Owner: Player, Armies: number };
+    export type AttackerTile = OwnedTile;
 
     export var isOwned = function(tile: Tile): tile is OwnedTile {
         return (<OwnedTile>tile).Owner !== undefined;
+    }
+
+    export var isAttacker = function(tile: OwnedTile): tile is AttackerTile {
+        return tile.Armies > 1;
     }
 
     let createTile = function(ooTile: ITile):FreeTile {
