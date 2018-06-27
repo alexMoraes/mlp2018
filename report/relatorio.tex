@@ -316,7 +316,30 @@ Ao falarmos do paradigma funcional, é impossível não envolver recursão. O pr
 %
 \chapter{Análise crítica}
 
-Após a realização das atividades propostas, sintetizamos uma tabela visando avaliar os principais aspectos da linguagem Typescript, tanto positivos quanto negativos 
+Após a realização das atividades propostas, sintetizamos uma tabela visando avaliar os principais aspectos da linguagem Typescript, tanto positivos quanto negativos.
+
+\begin{table}[]
+\centering
+\caption{Avaliação Typescript}
+\label{aval}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+Simplicidade          			&  7	&  \\ \hline
+Ortogonalidade        			&  5	&  \\ \hline
+Estrutura de Controle 			&  9	&  \\ \hline
+Tipos de Dados        			&  9	&  \\ \hline
+Estruturas de Dados   			&  9	&  \\ \hline
+Suporte a Abstração de Dados    &  9	&  \\ \hline
+Suporte a Abstração de Controle	&  9	&  \\ \hline
+Expressividade        			&  8	&  \\ \hline
+Checagem de Tipos     			&  10	&  \\ \hline
+Restrições de Aliasing        	&  		&  \\ \hline
+Tratamento de Excessões 		&  		&  \\ \hline
+Portabilidade        			&  10	&  \\ \hline
+Reusabilidade          			&  9	&  \\ \hline
+Tamanho de Código        		&  8	&  \\ \hline
+\end{tabular}
+\end{table}
 
 
 
@@ -325,7 +348,9 @@ Após a realização das atividades propostas, sintetizamos uma tabela visando a
 %
 \chapter{Conclusão}
 
-\section{Abordagem orientada a objetos}
+Ao abordar a comparação entre o paradigma puramente funcional com o paradigma orientado a objetos, podemos perceber o quão presos estamos à orienteção a objetos, de modo que tivemos uma dificuldade muito maior em tentar o problema proposto usando exclusivamente o paradigma funcional. Acreditamos que isso se deve ao fato de que a maneira de pensar do grupo tem muito em comum com a orientação a objetos, e que é o paradigma usado por todos no dia-a-dia. Mesmo com a constante implementação de características funcionais por linguagens orientadas a objetos, uma completa estruturação puramente funcional deixa a desejar, principalmente pela dificuldade em se reaproveitar código. Não sentimos muita dificuldade em aprender a sintaxe e as características do TypeScript, visto que a maioria do grupo já possuía uma prévia experiência com JavaScript.
+
+Obtivemos problemas consideráveis com desempenho no paradigma funcional, visto que algumas das soluções se tornaram inviáveis com recursões. Para exemplificar esse caso, podemos citar o algoritmo de geração aleatória do mapa, que tem como base a expansão aleatória através de pixels gerados aleatoriamente no mapa, que não teve problemas de desempenho na versão orientada a objetos mas que excedeu o limite da pilha na versão funcional, mesmo com uma quantidade de pixels cem vezes menor.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
