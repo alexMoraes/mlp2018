@@ -6,19 +6,12 @@ var img;
 
 function setup() {
     createCanvas(XX, YY);
-<<<<<<< HEAD
-    riskOO = new RiskEngine();
-    risk = Functional.InitGame(riskOO.players.length, riskOO.tiles);
-    console.log("Initializing game with " + risk.Players.length + " players and " + risk.Tiles.length + " tiles")
-    risk.matrix = riskOO.matrix;
-=======
     risk = Functional.InitGame(2, 52);
     console.log("Initializing game with " + risk.Players.length + " players and " + risk.Tiles.length + " tiles")
     console.log(risk);
     
     //riskOO = new RiskEngine();
     risk.matrix = risk.Matrix;
->>>>>>> Tile methods to functions
     //console.log(risk)
     noLoop();
     textSize(25);
@@ -54,17 +47,6 @@ function setup() {
 }
 
 function draw() {
-<<<<<<< HEAD
-    console.log(risk.GamePhase + ": " + risk.Message);
-    for (var i = 0; i < risk.Tiles.length; i++) {
-        tile = risk.Tiles[i]
-        if (tile.Owner !== undefined) {
-            // var player = risk.players[tile.owner - 1]
-            var player = tile.Owner
-            color = player.Color;
-            x = risk.Tiles[i].center[0];
-            y = risk.Tiles[i].center[1];
-=======
     for (var i = 0; i < risk.tiles.length; i++) {
         tile = risk.tiles[i]
         if (!Functional.isFree(tile)) {
@@ -72,30 +54,25 @@ function draw() {
             color = player.color;
             x = risk.tiles[i].center[0];
             y = risk.tiles[i].center[1];
->>>>>>> Tile methods to functions
             if (player.selectedTile != null && player.selectedTile.id == tile.id)
                 fill(color[0]-100, color[1]-100, color[2]-100);
             else
                 fill(color[0], color[1], color[2]);
             ellipse(x, y, 40, 40);
             fill(0, 0, 0);
-            text(String(tile.Armies), x - 7, y + 9);
+            text(String(tile.armies), x - 7, y + 9);
         }
     }
 }
 
 function mouseClicked() {
+    gameStatus.NextAction(1);
     var tileId = risk.matrix[Math.floor(mouseX)][Math.floor(mouseY)];
-    risk = Functional.takeAction(risk, tileId);
-    risk = Functional.nextState(risk);
-    risk.matrix = riskOO.matrix;
-    draw();
-    //risk.NextAction(tileId);
-    // if (tileId > 0) {
-    //     tileIndex = tileId - 1;
-    //     risk.action(tileIndex);
-    //     console.clear();
-    //     console.log(risk.getMessage());
-    //     draw();
-    // }
+    if (tileId > 0) {
+        tileIndex = tileId - 1;
+        risk.action(tileIndex);
+        console.clear();
+        console.log(risk.getMessage());
+        draw();
+    }
 }
