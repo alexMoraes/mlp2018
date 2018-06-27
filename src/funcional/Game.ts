@@ -24,9 +24,10 @@ namespace Functional {
         Armies: number,
     }
 
-    type CombatStep = SelectAttackerStep | SelectDefenderStep
+    type CombatStep = SelectAttackerStep | SelectDefenderStep | CombatResolutionStep
     type SelectAttackerStep = TurnBase & { Attackers: AttackerTile[] }
     type SelectDefenderStep = TurnBase & { SelectedAttacker: AttackerTile, Defenders: OwnedTile[] }
+    type CombatResolutionStep = TurnBase & { SelectedAttacker: AttackerTile, SelectDefender: OwnedTile }
 
     let isSetupPhase = function(gamePhase: GameState): gamePhase is SetupPhase {
         return (<SetupPhase>gamePhase).FreeTiles !== undefined;
@@ -108,7 +109,6 @@ namespace Functional {
             return gameState;
         }
         if(isSelectAttackerStep(gameState)){
-
         }
         return {
             Tiles: gameState.Tiles,
@@ -206,8 +206,39 @@ namespace Functional {
         }
     }
 
+    let selectDefender = function(gameState: SelectDefenderStep, tileId: number): SelectDefenderStep | CombatResolutionStep {
+        let tile = gameState.Defenders.find(tile => tile.Id === tileId);
+        if(tile === undefined){
+            gameState.Message = "Invalid tile";
+            return gameState;
+        }
+        else {
+            return {
+                ActivePlayer: gameState.ActivePlayer,
+                Defenders: gameState.Defenders,
+                Message: "Player " + gameState.ActivePlayer.Id + " declared an attack on tile " + tile.Id,
+                Players: gameState.Players,
+                PlayerTiles: gameState.PlayerTiles,
+                SelectDefender: tile,
+                SelectedAttacker: gameState.SelectedAttacker,
+                Tiles: gameState.Tiles
+            }
+        }
+    }
+
+    let resolveCombat = function(gameState: CombatResolutionStep): CombatStep {
+        let attDice = Math.min(3, gameState.SelectedAttacker.Armies - 1);
+        let defDice = Math.min(3, gameState.SelectDefender.Armies);
+        return gameState;
+    }
+
     let takeCombatAction = function(gameState: CombatStep, tileId: number): CombatStep {
         if(isSelectAttackerStep(gameState)) return selectAttacker(gameState, tileId);
+        if(isSelectDefenderStep(gameState)){
+            let step = selectDefender(gameState, tileId);
+            if(isSelectDefenderStep(step)) return step;
+            else return resolveCombat(step);
+        }
         return gameState;
     }
 
