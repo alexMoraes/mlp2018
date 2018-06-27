@@ -17,10 +17,8 @@ Warning--entry type for "riskMan" isn't style-file defined
 --line 5 of file biblio.bib
 Warning--entry type for "memMng" isn't style-file defined
 --line 15 of file biblio.bib
-Warning--entry type for "tsFunctions" isn't style-file defined
+Warning--entry type for "advancedtypes" isn't style-file defined
 --line 35 of file biblio.bib
-Warning--entry type for "typescript" isn't style-file defined
---line 45 of file biblio.bib
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=20001) to 20 items from 10.
@@ -30,45 +28,45 @@ Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 | Em caso de dúvidas ou problemas com este estilo procure |
 | http://abntex2.googlecode.com                           |
 +---------------------------------------------------------+
-You've used 6 entries,
+You've used 5 entries,
             6711 wiz_defined-function locations,
-            1215 strings with 9649 characters,
-and the built_in function-call counts, 7521 in all, are:
-= -- 1019
-> -- 60
-< -- 214
-+ -- 282
-- -- 20
-* -- 386
-:= -- 973
-add.period$ -- 15
-call.type$ -- 6
-change.case$ -- 33
+            1214 strings with 9620 characters,
+and the built_in function-call counts, 6405 in all, are:
+= -- 893
+> -- 45
+< -- 187
++ -- 249
+- -- 15
+* -- 330
+:= -- 831
+add.period$ -- 11
+call.type$ -- 5
+change.case$ -- 25
 chr.to.int$ -- 4
-cite$ -- 4
-duplicate$ -- 749
-empty$ -- 306
-format.name$ -- 92
-if$ -- 1484
-int.to.chr$ -- 2
+cite$ -- 3
+duplicate$ -- 640
+empty$ -- 249
+format.name$ -- 69
+if$ -- 1257
+int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 87
-newline$ -- 31
-num.names$ -- 20
-pop$ -- 134
+missing$ -- 69
+newline$ -- 24
+num.names$ -- 15
+pop$ -- 103
 preamble$ -- 1
-purify$ -- 18
+purify$ -- 15
 quote$ -- 0
-skip$ -- 889
+skip$ -- 779
 stack$ -- 1
-substring$ -- 346
-swap$ -- 248
-text.length$ -- 4
+substring$ -- 297
+swap$ -- 212
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 30
+while$ -- 23
 width$ -- 0
-write$ -- 63
-(There were 4 warnings)
+write$ -- 49
+(There were 3 warnings)

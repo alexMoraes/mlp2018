@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.3)  27 JUN 2018 00:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.3)  27 JUN 2018 00:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1004,9 +1004,6 @@ LaTeX Warning: Label `fig:tsClass' multiply defined.
 
 LaTeX Warning: Label `fig:tsClass' multiply defined.
 
-
-LaTeX Warning: Label `fig:currying' multiply defined.
-
 )
 \openout1 = `relatorio.aux'.
 
@@ -1519,16 +1516,16 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 308.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 311.
+(babel)             in language  on input line 312.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 311.
+(babel)             in language  on input line 312.
  [11
 
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 342.
+(babel)             in language  on input line 343.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 347.
+(babel)             in language  on input line 348.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1538,35 +1535,35 @@ Underfull \hbox (badness 10000) has occurred while \output is active
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 350.
+(babel)             in language  on input line 351.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 350.
+(babel)             in language  on input line 351.
 [12]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 352.
+(babel)             in language  on input line 353.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 357.
+(babel)             in language  on input line 358.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 365.
+(babel)             in language  on input line 366.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 365.
+(babel)             in language  on input line 366.
  [13]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 365.
+(babel)             in language  on input line 366.
 
 Underfull \hbox (badness 10000) has occurred while \output is active
 \T1/ptm/m/n/10.95 14
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 403.
+(babel)             in language  on input line 404.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 403.
+(babel)             in language  on input line 404.
 [14
 
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 403.
+(babel)             in language  on input line 404.
  (build/relatorio.bbl
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
@@ -1585,32 +1582,32 @@ Underfull \hbox (badness 10000) has occurred while \output is active
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 425.
+(babel)             in language  on input line 426.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 425.
+(babel)             in language  on input line 426.
 [16
 
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 425.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 425.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 425.
+(babel)             in language  on input line 426.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 426.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 426.
  (build/relatorio.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 425.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 425.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 426.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 426.
 Package rerunfilecheck Info: File `relatorio.out' has not changed.
 (rerunfilecheck)             Checksum: 9B10266F9706CA15853258968B4A8A42;3906.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 425.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 426.
  ) 
 Here is how much of TeX's memory you used:
- 22302 strings out of 493029
- 354832 string characters out of 6136235
- 436111 words of memory out of 5000000
- 25484 multiletter control sequences out of 15000+600000
+ 22297 strings out of 493029
+ 354758 string characters out of 6136235
+ 435992 words of memory out of 5000000
+ 25480 multiletter control sequences out of 15000+600000
  28995 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  48i,9n,45p,10365b,1099s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1619,10 +1616,10 @@ e/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on build/relatorio.pdf (16 pages, 247047 bytes).
+Output written on build/relatorio.pdf (16 pages, 247478 bytes).
 PDF statistics:
  294 PDF objects out of 1000 (max. 8388607)
  261 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
+ 67 named destinations out of 1000 (max. 500000)
  221 words of extra memory for PDF output out of 10000 (max. 10000000)
 
