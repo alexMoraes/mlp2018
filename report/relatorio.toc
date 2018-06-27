@@ -23,5 +23,5 @@
 \contentsline {section}{\numberline {5.6}Fun\IeC {\c c}\IeC {\~o}es de primeira ordem}{12}{section.5.6}
 \contentsline {section}{\numberline {5.7}Recurs\IeC {\~a}o}{12}{section.5.7}
 \contentsline {chapter}{6~An\IeC {\'a}lise cr\IeC {\'\i }tica}{13}{CHAPTER.6}
-\contentsline {chapter}{7~Conclus\IeC {\~a}o}{15}{CHAPTER.7}
+\contentsline {chapter}{7~Conclus\IeC {\~a}o}{14}{CHAPTER.7}
 \contentsfinish 
