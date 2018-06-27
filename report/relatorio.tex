@@ -347,13 +347,13 @@ Simplicidade          			&  7  \\ \hline
 Ortogonalidade        			&  5  \\ \hline
 Estrutura de Controle 			&  9  \\ \hline
 Tipos de Dados        			&  9  \\ \hline
-Estruturas de Dados   			&  9  \\ \hline
+Estruturas de Dados   			&  10 \\ \hline
 Suporte a Abstração de Dados    &  9  \\ \hline
-Suporte a Abstração de Controle	&  9  \\ \hline
+Suporte a Abstração de Controle	&  8  \\ \hline
 Expressividade        			&  8  \\ \hline
 Checagem de Tipos     			&  10 \\ \hline
 Restrições de Aliasing        	&  	  \\ \hline
-Tratamento de Excessões 		&  	  \\ \hline
+Tratamento de Excessões 		&  7  \\ \hline
 Portabilidade        			&  10 \\ \hline
 Reusabilidade          			&  9  \\ \hline
 Tamanho de Código        		&  8  \\ \hline
@@ -364,11 +364,27 @@ Tamanho de Código        		&  8  \\ \hline
 
 \textbf{Ortogonalidade:} Por Typescript ser uma extensão de Javascript, muitas das tipagens e obrigatoriedades se misturam com a pluralidade do Javascript nativo e de suas bibliotecas, o que diminui consideravelmente a ortogonalidade da linguagem.
 
+\textbf{Estrutura de Controle:}
+
+\textbf{Tipos de Dados:} Os tipos de dados são bem definidos, com exceção do number, que não faz diferenciação entre domínios diferentes, como ponto flutuante e inteiros.
+
+\textbf{Estruturas de Dados:} Typescript possui um bom suporte para difinições de estruturas de dados, dando liberdade ao programador para definir tanto objetos quanto outros tipos. 
+
+\textbf{Suporte a Abstração de Dados:} A abstração de dados na linguagem é muito boa por conta da possibilidade de criar classes e interfaces para elas, abstraindo completamente a implementação das classes.
+
+\textbf{Suporte a Abstração de Controle:}
+
 \textbf{Expressividade:} Em um geral, nos contentamos com a expressividade do Typescript com apenas a ressalva de que a sobrecarga de parâmetros não é trivial, o que nos fez retirar alguns pontos neste quesito.
 
 \textbf{Checagem de Tipos:} O grande diferencial do Typescript é a checagem de tipos, que o faz se distanciar positivamente da sua origem, o Javascript. O Typescript se propõe a adicionar a checagem de tipos e a faz com excelência.
 
+\textbf{Restrições de Aliasing:} Typescript suporta tanto aliasing quando aliasing genérico. Não encontramos restrições.
+
+\textbf{Tratamento de Exceções:} Typescript implementa o tratamento de exceções, mas permite algumas liberdades que dificultam o seu uso, como o disparo de uma string somente, o que faz com que o rastreio do erro seja perdido.
+
 \textbf{Portabilidade:} Pelo fato da linguagem "compilar" para javascript, que pode ser executado em qualquer navegador, a linguagem é extremamente portável, portando atribuímos nota 10.
+
+\textbf{Reusabilidade:} As dificuldades que encontramos de reusabilidade não tem a ver necessariamente com a linguagem, mas com o paradigma funcional que tivemos que implementar. Em um geral, é possível fazer um bom código e reusável.
 
 \textbf{Tamanho de Código:} O código gerado é mais verboso que o próprio Javascript, mas nada que atrapalhe o desenvolvimento ou que possa ser considerado ruim. Vale ressaltar aqui também que o código gerado em Javascript é maior que o código em Typescript.
 
