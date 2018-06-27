@@ -286,7 +286,24 @@ Funções lambda, ou funções anonimas, são funções que essencialmente não 
 
 Currying é o processo de traduzir uma função de multiplos argumentos para uma função de um único argumento, que tem como retorno uma função que recebe um argumento a menos que a anterior. É um recurso extremamente poderoso das linguagens funcionais, e pode ser muito bem explorado se utilizado em conjunto com o conceito de funções de primeira ordem.
 
-Typescript não possui suporte nativo para currying. Sendo assim, não existe uma forma automatizada de se transformar uma função com múltiplos argumentos em uma função com currying. Portanto, única forma de tirar proveito dessa técnica é o uso explícito de funções que retornam outras funções.
+Typescript não possui suporte nativo para currying. Sendo assim, não existe uma forma automatizada de se transformar uma função com múltiplos argumentos em uma função com currying. Portanto, única forma de tirar proveito dessa técnica é o uso explícito de funções que retornam outras funções conforme pode ser visto na Figura \ref{fig:currying}.
+
+\begin{figure}[h]
+\begin{verbatim}
+type Die = () => number;
+type DiceRoll = (n: number) => number[];
+let rollDice = function(die: Die): DiceRoll {
+    return function(n: number) : number[] {
+        return Array
+        		.apply(null, {length: n})
+        		.map(Function.call, die);
+    }
+}
+\end{verbatim}
+\caption{Exemplo de uso de currying}
+\legend{Fonte: Os Autores}
+\label{fig:currying}
+\end{figure}
 
 \section{Pattern Matching}
 
